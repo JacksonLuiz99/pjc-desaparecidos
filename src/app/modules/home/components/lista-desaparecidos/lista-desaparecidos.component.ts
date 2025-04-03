@@ -38,7 +38,7 @@ export class ListaDesaparecidosComponent implements OnInit {
 
   // NOVO: Variáveis de paginação
 paginaAtual = 1;
-itensPorPagina = 12; 
+itensPorPagina = 10; 
 // NOVO: Métodos para navegação entre páginas
 proximaPagina() {
   this.paginaAtual++;
