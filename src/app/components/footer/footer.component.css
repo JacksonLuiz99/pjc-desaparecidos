@@ -1,0 +1,27 @@
+.footer {
+    background: linear-gradient(to bottom, #000, #444);
+    color: white;
+    padding: 16px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 500;
+    border-top: 2px solid #666;
+}
+
+.footer-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 4px;
+}
+
+.author {
+    font-weight: bold;
+    color: #00bcd4;
+    transition: color 0.3s;
+}
+
+.author:hover {
+    color: #ffcc00;
+}
