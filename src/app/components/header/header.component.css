@@ -1,0 +1,48 @@
+.header {
+    background: linear-gradient(to bottom, #000, #444);
+    color: white;
+    padding: 20px;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    border-bottom: 2px solid #666;
+}
+
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.logo {
+    height: 60px;
+}
+
+.header-text h1 {
+    font-size: 22px;
+    font-weight: bold;
+    margin: 0;
+}
+
+.header-text h2 {
+    font-size: 16px;
+    margin: 4px 0 0;
+    color: #ddd;
+}
+
+.developer {
+    font-size: 14px;
+    margin-top: 10px;
+    color: #bbb;
+}
+
+.developer span {
+    font-weight: bold;
+    color: #00bcd4;
+    transition: color 0.3s;
+}
+
+.developer span:hover {
+    color: #ffcc00;
+}
