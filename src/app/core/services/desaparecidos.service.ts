@@ -72,7 +72,7 @@ export class DesaparecidosService {
 
   // Dados randômicos (para a página inicial)
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
-    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico?registros=8`)
+    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/{aberto/dinamico?registros=12}`)
   }
 
   // Normaliza os campos da API para nomes consistentes
@@ -83,7 +83,7 @@ export class DesaparecidosService {
       sexo: pessoa.sexo || pessoa.escor || pessoa.exo || 'Não informado',
       urlFoto: pessoa.urlFoto || 
                pessoa.ultimoCorrencia?.listCartaz?.[0]?.urlCartaz || 
-               'assets/imagem-padrao.jpg'
+               'assets/imagem-padrao.svg'
     };
   }
 

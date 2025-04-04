@@ -1,6 +1,25 @@
+<!-- Filtros de busca -->
+<app-search-filters (resultadoBusca)="atualizarResultados($event)"></app-search-filters>
+
+<!-- Resultado dos filtros -->
+<div *ngIf="dadosFiltrados.length > 0; else semResultados">
+  <div class="grid">
+    <div *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual - 1) * itensPorPagina:(paginaAtual) * itensPorPagina" class="card">
+      <!-- Exibir o card da pessoa -->
+      {{ pessoa.nome }}
+    </div>
+  </div>
+</div>
+
+<ng-template #semResultados>
+  <p style="text-align: center;">Nenhum resultado encontrado.</p>
+</ng-template>
 
 <div class="container">
-  <h1 class="titulo">Pessoas Desaparecidas MT</h1>
+  <div class="row-abaixo-titulo">
+  <h1 class="titulo">Pessoas desaparecidas em MT:</h1>
+    <p>Exibindo resultados com base nos filtros aplicados.</p>
+  </div>
 
   <!-- Controles de Paginação -->
   <div class="paginacao">

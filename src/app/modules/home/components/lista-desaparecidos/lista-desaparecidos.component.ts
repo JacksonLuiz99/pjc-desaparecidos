@@ -9,6 +9,7 @@ import { DesaparecidosService } from 'src/app/core/services/desaparecidos.servic
 })
 export class ListaDesaparecidosComponent implements OnInit {
   desaparecidos: any[] = [];
+  dadosFiltrados: any[] = []; // NOVO: Para armazenar os dados vindos do filtro
   loading = true;
   error = false;
 
@@ -26,6 +27,7 @@ export class ListaDesaparecidosComponent implements OnInit {
     this.desaparecidosService.getDesaparecidosAleatorios().subscribe({
       next: (pessoas) => {
         this.desaparecidos = pessoas;
+        this.dadosFiltrados = pessoas; // inicializa os filtrados com os dados
         this.loading = false;
       },
       error: (erro) => {
@@ -36,21 +38,25 @@ export class ListaDesaparecidosComponent implements OnInit {
     });
   }
 
-  // NOVO: Variáveis de paginação
-paginaAtual = 1;
-itensPorPagina = 10; 
-// NOVO: Métodos para navegação entre páginas
-proximaPagina() {
-  this.paginaAtual++;
-}
-
-paginaAnterior() {
-  if (this.paginaAtual > 1) {
-    this.paginaAtual--;
+  // NOVO: Receber dados do filtro
+  atualizarResultados(filtrados: any[]) {
+    this.dadosFiltrados = filtrados;
   }
-}
 
-  // Método para tentar recarregar em caso de erro
+  // Paginação
+  paginaAtual = 1;
+  itensPorPagina = 11; 
+
+  proximaPagina() {
+    this.paginaAtual++;
+  }
+
+  paginaAnterior() {
+    if (this.paginaAtual > 1) {
+      this.paginaAtual--;
+    }
+  }
+
   recarregar() {
     this.carregarDados();
   }

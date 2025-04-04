@@ -1,4 +1,5 @@
-import { Component, EventEmitter, Output  } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { DesaparecidosService } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
   selector: 'app-search-filters',
@@ -13,15 +14,21 @@ export class SearchFiltersComponent {
   sexo: string = '';
   status: string = '';
 
-  @Output() filtrosAlterados = new EventEmitter<any>();
+  @Output() resultadoBusca = new EventEmitter<any[]>();
+
+  constructor(private desaparecidosService: DesaparecidosService) {}
 
   buscar() {
-    this.filtrosAlterados.emit({
-      nome: this.nome,
-      idadeMin: this.idadeMin,
-      idadeMax: this.idadeMax,
-      sexo: this.sexo,
-      status: this.status
+    this.desaparecidosService.getDesaparecidosPaginados(
+      0,
+      30, // ou outro valor de página e porPágina se desejar
+      this.status || 'DESAPARECIDO',
+      this.nome,
+      this.sexo,
+      this.idadeMin ?? undefined,
+      this.idadeMax ?? undefined
+    ).subscribe(response => {
+      this.resultadoBusca.emit(response.content);
     });
   }
 
@@ -31,6 +38,6 @@ export class SearchFiltersComponent {
     this.idadeMax = null;
     this.sexo = '';
     this.status = '';
-    this.buscar(); 
+    this.resultadoBusca.emit([]);
   }
 }
