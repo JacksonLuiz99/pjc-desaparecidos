@@ -3,80 +3,122 @@
 
 <!-- Resultado dos filtros -->
 <div *ngIf="dadosFiltrados.length > 0; else semResultados">
-  <div class="grid">
-    <div *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual - 1) * itensPorPagina:(paginaAtual) * itensPorPagina" class="card">
-      <!-- Exibir o card da pessoa -->
-      {{ pessoa.nome }}
+  <div class="container">
+    <div class="row-abaixo-titulo">
+      <h1 class="titulo">Resultados da busca:</h1>
+      <p>Exibindo resultados com base nos filtros aplicados.</p>
     </div>
-  </div>
-</div>
 
-<ng-template #semResultados>
-  <p style="text-align: center;">Nenhum resultado encontrado.</p>
-</ng-template>
-
-<div class="container">
-  <div class="row-abaixo-titulo">
-  <h1 class="titulo">Pessoas desaparecidas em MT:</h1>
-    <p>Exibindo resultados com base nos filtros aplicados.</p>
-  </div>
-
-  <!-- Controles de Paginação -->
-  <div class="paginacao">
-    <button (click)="paginaAnterior()" [disabled]="paginaAtual === 1" class="botao">
-      ⬅ Anterior
-    </button>
-    <span class="pagina-texto">Página {{ paginaAtual }}</span>
-    <button (click)="proximaPagina()" [disabled]="desaparecidos.length < 10" class="botao">
-      Próxima ➡
-    </button>
-  </div>
-
-  <div class="grid-container">
-    <div *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual-1)*10:paginaAtual*10" class="card">
-      <!-- Imagem -->
-      <div class="imagem-container">
-        <img [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'" 
-             alt="Foto de {{ desaparecido.nome || 'Desaparecido' }}" 
-             class="imagem">
-      </div>
-
-      <!-- Informações -->
-      <div class="informacoes">
-        <h2 class="nome">{{ desaparecido.nome || 'Nome não informado' }}</h2>
-        <p *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>
-        <p *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
-        <p *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
-        <p *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
-
-        <p class="data" *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
-          Desaparecido em: {{ desaparecido.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
-        </p>
-
-        <p class="local" *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
-          Último local visto: {{ desaparecido.ultimoCorrencia.localDesaparecimento }}
-        </p>
-
-        <!-- Status -->
-        <div class="status">
-          <span [ngClass]="{
-              'localizado': desaparecido.ultimoCorrencia?.encontradoVivo,
-              'desaparecido': !desaparecido.ultimoCorrencia?.encontradoVivo
-            }">
-            {{ desaparecido.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
-          </span>
+    <div class="grid-container">
+      <div *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual - 1) * itensPorPagina:(paginaAtual) * itensPorPagina" class="card">
+        
+        <!-- Badge de status -->
+        <div class="badge-status" 
+             [ngClass]="{
+               'localizado': pessoa.ultimoCorrencia?.encontradoVivo,
+               'desaparecido': !pessoa.ultimoCorrencia?.encontradoVivo
+             }">
+          {{ pessoa.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
         </div>
 
-        <!-- Botão de detalhes -->
-        <a [routerLink]="['/detalhes', desaparecido.id]" class="detalhes-botao">
-          Ver detalhes
-        </a>
+        <!-- Imagem -->
+        <div class="imagem-container">
+          <img [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'" 
+               alt="Foto de {{ pessoa.nome || 'Desaparecido' }}" 
+               class="imagem">
+        </div>
+
+        <!-- Informações -->
+        <div class="informacoes">
+          <h2 class="nome">{{ pessoa.nome || 'Nome não informado' }}</h2>
+          <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
+          <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
+          <p *ngIf="pessoa.corOlhos">Cor dos Olhos: {{ pessoa.corOlhos }}</p>
+          <p *ngIf="pessoa.corCabelos">Cor dos Cabelos: {{ pessoa.corCabelos }}</p>
+
+          <p class="data" *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento">
+            Desaparecido em: {{ pessoa.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
+          </p>
+
+          <p class="local" *ngIf="pessoa.ultimoCorrencia?.localDesaparecimento">
+            Último local visto: {{ pessoa.ultimoCorrencia.localDesaparecimento }}
+          </p>
+
+          <!-- Botão de detalhes -->
+          <a [routerLink]="['/detalhes', pessoa.id]" class="detalhes-botao">
+            🔍 Ver detalhes
+          </a>
+        </div>
       </div>
     </div>
   </div>
-
-  <!-- Caso não haja desaparecidos -->
-  <div *ngIf="desaparecidos.length === 0" class="nenhum-encontrado">
-    <p>Nenhuma pessoa desaparecida encontrada.</p>
-  </div>
 </div>
+
+<!-- Quando não houver resultado filtrado -->
+<ng-template #semResultados>
+  <div class="container">
+    <div class="row-abaixo-titulo">
+      <h1 class="titulo">Pessoas desaparecidas em MT:</h1>
+      <p>Exibindo todos os registros disponíveis.</p>
+    </div>
+
+    <!-- Controles de Paginação -->
+    <div class="paginacao">
+      <button (click)="paginaAnterior()" [disabled]="paginaAtual === 1" class="botao">
+        ⬅ Anterior
+      </button>
+      <span class="pagina-texto">Página {{ paginaAtual }}</span>
+      <button (click)="proximaPagina()" [disabled]="desaparecidos.length < 10" class="botao">
+        Próxima ➡
+      </button>
+    </div>
+
+    <div class="grid-container">
+      <div *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual-1)*10:paginaAtual*10" class="card">
+
+        <!-- Badge de status -->
+        <div class="badge-status" 
+             [ngClass]="{
+               'localizado': desaparecido.ultimoCorrencia?.encontradoVivo,
+               'desaparecido': !desaparecido.ultimoCorrencia?.encontradoVivo
+             }">
+          {{ desaparecido.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
+        </div>
+
+        <!-- Imagem -->
+        <div class="imagem-container">
+          <img [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'" 
+               alt="Foto de {{ desaparecido.nome || 'Desaparecido' }}" 
+               class="imagem">
+        </div>
+
+        <!-- Informações -->
+        <div class="informacoes">
+          <h2 class="nome">{{ desaparecido.nome || 'Nome não informado' }}</h2>
+          <p *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>
+          <p *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
+          <p *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
+          <p *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
+
+          <p class="data" *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
+            Desaparecido em: {{ desaparecido.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
+          </p>
+
+          <p class="local" *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
+            Último local visto: {{ desaparecido.ultimoCorrencia.localDesaparecimento }}
+          </p>
+
+          <!-- Botão de detalhes -->
+          <a [routerLink]="['/detalhes', desaparecido.id]" class="detalhes-botao">
+            🔍 Ver detalhes
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Caso não haja desaparecidos -->
+    <div *ngIf="desaparecidos.length === 0" class="nenhum-encontrado">
+      <p>Nenhuma pessoa desaparecida encontrada.</p>
+    </div>
+  </div>
+</ng-template>

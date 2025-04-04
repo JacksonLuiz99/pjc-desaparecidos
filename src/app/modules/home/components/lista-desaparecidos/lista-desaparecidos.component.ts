@@ -45,7 +45,7 @@ export class ListaDesaparecidosComponent implements OnInit {
 
   // Paginação
   paginaAtual = 1;
-  itensPorPagina = 11; 
+  itensPorPagina = 12; 
 
   proximaPagina() {
     this.paginaAtual++;
