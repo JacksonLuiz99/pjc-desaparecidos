@@ -72,7 +72,7 @@ export class DesaparecidosService {
 
   // Dados randômicos (para a página inicial)
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
-    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/{aberto/dinamico?registros=12}`)
+    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico?registros=10`);
   }
 
   // Normaliza os campos da API para nomes consistentes

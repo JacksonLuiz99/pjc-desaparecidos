@@ -10,8 +10,7 @@
     </div>
 
     <div class="grid-container">
-      <div *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual - 1) * itensPorPagina:(paginaAtual) * itensPorPagina" class="card">
-        
+      <mat-card *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)" class="card">
         <!-- Badge de status -->
         <div class="badge-status" 
              [ngClass]="{
@@ -21,35 +20,32 @@
           {{ pessoa.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
         </div>
 
-        <!-- Imagem -->
         <div class="imagem-container">
-          <img [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'" 
-               alt="Foto de {{ pessoa.nome || 'Desaparecido' }}" 
-               class="imagem">
+          <img mat-card-image [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'" 
+               alt="Foto de {{ pessoa.nome || 'Desaparecido' }}">
         </div>
 
-        <!-- Informações -->
-        <div class="informacoes">
-          <h2 class="nome">{{ pessoa.nome || 'Nome não informado' }}</h2>
+        <mat-card-content>
+          <h2>{{ pessoa.nome || 'Nome não informado' }}</h2>
           <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
           <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
           <p *ngIf="pessoa.corOlhos">Cor dos Olhos: {{ pessoa.corOlhos }}</p>
           <p *ngIf="pessoa.corCabelos">Cor dos Cabelos: {{ pessoa.corCabelos }}</p>
 
-          <p class="data" *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento">
+          <p *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento">
             Desaparecido em: {{ pessoa.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
           </p>
 
-          <p class="local" *ngIf="pessoa.ultimoCorrencia?.localDesaparecimento">
+          <p *ngIf="pessoa.ultimoCorrencia?.localDesaparecimento">
             Último local visto: {{ pessoa.ultimoCorrencia.localDesaparecimento }}
           </p>
 
           <!-- Botão de detalhes -->
-          <a [routerLink]="['/detalhes', pessoa.id]" class="detalhes-botao">
-            🔍 Ver detalhes
+          <a mat-button color="primary" [routerLink]="['/detalhes', pessoa.id]">
+            <mat-icon>search</mat-icon> Ver detalhes
           </a>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
     </div>
   </div>
 </div>
@@ -62,20 +58,8 @@
       <p>Exibindo todos os registros disponíveis.</p>
     </div>
 
-    <!-- Controles de Paginação -->
-    <div class="paginacao">
-      <button (click)="paginaAnterior()" [disabled]="paginaAtual === 1" class="botao">
-        ⬅ Anterior
-      </button>
-      <span class="pagina-texto">Página {{ paginaAtual }}</span>
-      <button (click)="proximaPagina()" [disabled]="desaparecidos.length < 10" class="botao">
-        Próxima ➡
-      </button>
-    </div>
-
     <div class="grid-container">
-      <div *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual-1)*10:paginaAtual*10" class="card">
-
+      <mat-card *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)" class="card">
         <!-- Badge de status -->
         <div class="badge-status" 
              [ngClass]="{
@@ -85,35 +69,32 @@
           {{ desaparecido.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
         </div>
 
-        <!-- Imagem -->
         <div class="imagem-container">
-          <img [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'" 
-               alt="Foto de {{ desaparecido.nome || 'Desaparecido' }}" 
-               class="imagem">
+          <img mat-card-image [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'" 
+               alt="Foto de {{ desaparecido.nome || 'Desaparecido' }}">
         </div>
 
-        <!-- Informações -->
-        <div class="informacoes">
-          <h2 class="nome">{{ desaparecido.nome || 'Nome não informado' }}</h2>
+        <mat-card-content>
+          <h2>{{ desaparecido.nome || 'Nome não informado' }}</h2>
           <p *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>
           <p *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
           <p *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
           <p *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
 
-          <p class="data" *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
+          <p *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
             Desaparecido em: {{ desaparecido.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
           </p>
 
-          <p class="local" *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
+          <p *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
             Último local visto: {{ desaparecido.ultimoCorrencia.localDesaparecimento }}
           </p>
 
           <!-- Botão de detalhes -->
-          <a [routerLink]="['/detalhes', desaparecido.id]" class="detalhes-botao">
-            🔍 Ver detalhes
+          <a mat-button color="primary" [routerLink]="['/detalhes', desaparecido.id]">
+            <mat-icon>search</mat-icon> Ver detalhes
           </a>
-        </div>
-      </div>
+        </mat-card-content>
+      </mat-card>
     </div>
 
     <!-- Caso não haja desaparecidos -->
@@ -122,3 +103,11 @@
     </div>
   </div>
 </ng-template>
+
+<!-- Controles de Paginação com Angular Material -->
+<mat-paginator [length]="totalItens"
+               [pageSize]="itensPorPagina"
+               [pageSizeOptions]="[5, 10, 25, 100]"
+               showFirstLastButtons
+               (page)="onPaginaChange($event)">
+</mat-paginator>

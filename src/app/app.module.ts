@@ -9,6 +9,10 @@ import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 @NgModule({
   declarations: [
@@ -25,7 +29,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
     // Importa o módulo de paginação do Angular Material
     MatPaginatorModule,
-     BrowserAnimationsModule
+     BrowserAnimationsModule,
+     MatButtonModule,
+     MatCardModule,
+     MatIconModule,
+      MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
