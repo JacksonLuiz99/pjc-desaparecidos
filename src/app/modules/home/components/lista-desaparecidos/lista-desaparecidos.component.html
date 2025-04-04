@@ -1,61 +1,55 @@
-<div class="container mx-auto p-6">
-  <h1 class="text-3xl font-bold text-center mb-6 text-gray-800">Pessoas Desaparecidas</h1>
+
+<div class="container">
+  <h1 class="titulo">Pessoas Desaparecidas MT</h1>
 
   <!-- Controles de Paginação -->
-  <div class="flex justify-between items-center mb-6">
-    <button (click)="paginaAnterior()" 
-            [disabled]="paginaAtual === 1"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 disabled:opacity-50">
+  <div class="paginacao">
+    <button (click)="paginaAnterior()" [disabled]="paginaAtual === 1" class="botao">
       ⬅ Anterior
     </button>
-    <span class="text-lg font-semibold text-gray-700">Página {{ paginaAtual }}</span>
-    <button (click)="proximaPagina()" 
-            [disabled]="desaparecidos.length < 10"
-            class="px-4 py-2 bg-gray-300 text-gray-700 rounded-lg shadow-md hover:bg-gray-400 disabled:opacity-50">
+    <span class="pagina-texto">Página {{ paginaAtual }}</span>
+    <button (click)="proximaPagina()" [disabled]="desaparecidos.length < 10" class="botao">
       Próxima ➡
     </button>
   </div>
 
-  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-    <div *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual-1)*10:paginaAtual*10" 
-         class="bg-white rounded-lg shadow-lg overflow-hidden hover:shadow-xl transition-all">
+  <div class="grid-container">
+    <div *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual-1)*10:paginaAtual*10" class="card">
       <!-- Imagem -->
-      <div class="h-56 bg-gray-200 flex justify-center items-center">
+      <div class="imagem-container">
         <img [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'" 
              alt="Foto de {{ desaparecido.nome || 'Desaparecido' }}" 
-             class="object-cover h-full w-full">
+             class="imagem">
       </div>
 
       <!-- Informações -->
-      <div class="p-5">
-        <h2 class="text-2xl font-semibold text-gray-800 mb-2">{{ desaparecido.nome || 'Nome não informado' }}</h2>
-        <p class="text-gray-600" *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>
-        <p class="text-gray-600" *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
-        <p class="text-gray-600" *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
-        <p class="text-gray-600" *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
+      <div class="informacoes">
+        <h2 class="nome">{{ desaparecido.nome || 'Nome não informado' }}</h2>
+        <p *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>
+        <p *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
+        <p *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
+        <p *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
 
-        <p class="text-sm text-gray-500 mt-2" *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
+        <p class="data" *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
           Desaparecido em: {{ desaparecido.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
         </p>
 
-        <p class="text-sm text-gray-500 mt-2" *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
+        <p class="local" *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
           Último local visto: {{ desaparecido.ultimoCorrencia.localDesaparecimento }}
         </p>
 
         <!-- Status -->
-        <div class="mt-4">
-          <span class="px-4 py-2 rounded-full text-sm font-semibold text-white"
-            [ngClass]="{
-              'bg-green-500': desaparecido.ultimoCorrencia?.encontradoVivo,
-              'bg-red-500': !desaparecido.ultimoCorrencia?.encontradoVivo
+        <div class="status">
+          <span [ngClass]="{
+              'localizado': desaparecido.ultimoCorrencia?.encontradoVivo,
+              'desaparecido': !desaparecido.ultimoCorrencia?.encontradoVivo
             }">
             {{ desaparecido.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
           </span>
         </div>
 
         <!-- Botão de detalhes -->
-        <a [routerLink]="['/detalhes', desaparecido.id]"
-           class="mt-5 inline-block w-full text-center bg-blue-600 hover:bg-blue-700 text-white py-3 px-5 rounded-lg font-semibold transition-all">
+        <a [routerLink]="['/detalhes', desaparecido.id]" class="detalhes-botao">
           Ver detalhes
         </a>
       </div>
@@ -63,7 +57,7 @@
   </div>
 
   <!-- Caso não haja desaparecidos -->
-  <div *ngIf="desaparecidos.length === 0" class="text-center py-10 text-gray-700">
-    <p class="text-lg font-semibold">Nenhuma pessoa desaparecida encontrada.</p>
+  <div *ngIf="desaparecidos.length === 0" class="nenhum-encontrado">
+    <p>Nenhuma pessoa desaparecida encontrada.</p>
   </div>
 </div>
