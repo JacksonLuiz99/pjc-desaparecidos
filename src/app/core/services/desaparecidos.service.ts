@@ -55,8 +55,13 @@ export class DesaparecidosService {
 
     if (nome) params = params.set('nome', nome);
     if (sexo) params = params.set('sexo', sexo);
-    if (faixaIdadeInicial) params = params.set('faixaIdealInicial', faixaIdadeInicial.toString());
-    if (faixaIdadeFinal) params = params.set('faixaIdealFinal', faixaIdadeFinal.toString());
+    if (faixaIdadeInicial !== undefined && faixaIdadeInicial !== null) {
+      params = params.set('faixaIdadeInicial', faixaIdadeInicial.toString());
+    }
+    if (faixaIdadeFinal !== undefined && faixaIdadeFinal !== null) {
+      params = params.set('faixaIdadeFinal', faixaIdadeFinal.toString());
+    }
+    
 
     return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params }).pipe(
       map(response => this.normalizarDados(response))

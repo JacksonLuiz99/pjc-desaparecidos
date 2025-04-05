@@ -19,9 +19,7 @@ export class SearchFiltersComponent {
   constructor(private desaparecidosService: DesaparecidosService) {}
 
   buscar() {
-    // Corrigir sexo para o formato aceito pela API
     const sexoFormatado = this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : '';
-
     const statusList = this.status ? [this.status] : ['DESAPARECIDO', 'LOCALIZADO'];
 
     const chamadas = statusList.map(status =>
@@ -29,10 +27,10 @@ export class SearchFiltersComponent {
         0,
         999,
         status,
-        this.nome || '',
-        sexoFormatado || '',
-        this.idadeMin ?? 0,
-        this.idadeMax ?? 0
+        this.nome?.trim(),
+        sexoFormatado,
+        this.idadeMin ?? undefined,
+        this.idadeMax ?? undefined
       )
     );
 
