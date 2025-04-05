@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Output } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { DesaparecidosService } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
@@ -6,7 +7,6 @@ import { DesaparecidosService } from 'src/app/core/services/desaparecidos.servic
   templateUrl: './search-filters.component.html',
   styleUrls: ['./search-filters.component.css']
 })
-
 export class SearchFiltersComponent {
   nome: string = '';
   idadeMin: number | null = null;
@@ -19,16 +19,26 @@ export class SearchFiltersComponent {
   constructor(private desaparecidosService: DesaparecidosService) {}
 
   buscar() {
-    this.desaparecidosService.getDesaparecidosPaginados(
-      0,
-      30, // ou outro valor de página e porPágina se desejar
-      this.status || 'DESAPARECIDO',
-      this.nome,
-      this.sexo,
-      this.idadeMin ?? undefined,
-      this.idadeMax ?? undefined
-    ).subscribe(response => {
-      this.resultadoBusca.emit(response.content);
+    // Corrigir sexo para o formato aceito pela API
+    const sexoFormatado = this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : '';
+
+    const statusList = this.status ? [this.status] : ['DESAPARECIDO', 'LOCALIZADO'];
+
+    const chamadas = statusList.map(status =>
+      this.desaparecidosService.getDesaparecidosPaginados(
+        0,
+        999,
+        status,
+        this.nome || '',
+        sexoFormatado || '',
+        this.idadeMin ?? 0,
+        this.idadeMax ?? 0
+      )
+    );
+
+    forkJoin(chamadas).subscribe(resultados => {
+      const unificado = resultados.flatMap(r => r.content);
+      this.resultadoBusca.emit(unificado);
     });
   }
 

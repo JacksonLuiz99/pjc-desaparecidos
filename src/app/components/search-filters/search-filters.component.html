@@ -1,49 +1,48 @@
 <div class="filtros-container">
-    <h2>Buscar por pessoa desaparecida</h2>
-    <h3>Digite as informações a baixo para uma busca mais precisa</h3>
-  
-    <!-- Nome -->
-    <div class="campo">
-      <label for="nome">Nome</label>
-      <input id="nome" type="text" [(ngModel)]="nome" placeholder="Digite o nome da pessoa..." />
+  <h2 class="titulo-filtros">Buscar por pessoa desaparecida</h2>
+  <h3 class="subtitulo-filtros">Preencha os campos para uma busca mais precisa</h3>
+
+  <!-- Nome -->
+  <div class="campo">
+    <label for="nome">Nome</label>
+    <input id="nome" type="text" [(ngModel)]="nome" placeholder="Digite o nome da pessoa..." />
+  </div>
+
+  <!-- Faixa Etária -->
+  <div class="campo-row">
+    <div class="campo half">
+      <label for="idadeMin">Idade Mínima</label>
+      <input id="idadeMin" type="number" [(ngModel)]="idadeMin" min="0" placeholder="Ex: 10" />
     </div>
-  
-    <!-- Faixa Etária -->
-    <div class="campo-row">
-      <div class="campo half">
-        <label for="idadeMin">Idade Mínima</label>
-        <input id="idadeMin" type="number" [(ngModel)]="idadeMin" />
-      </div>
-      <div class="campo half">
-        <label for="idadeMax">Idade Máxima</label>
-        <input id="idadeMax" type="number" [(ngModel)]="idadeMax" />
-      </div>
-    </div>
-  
-    <!-- Sexo e Status -->
-    <div class="campo-row">
-      <div class="campo half">
-        <label for="sexo">Sexo</label>
-        <select id="sexo" [(ngModel)]="sexo">
-          <option value="">Todos</option>
-          <option value="M">Masculino</option>
-          <option value="F">Feminino</option>
-        </select>
-      </div>
-      <div class="campo half">
-        <label for="status">Status</label>
-        <select id="status" [(ngModel)]="status">
-          <option value="">Todos</option>
-          <option value="desaparecido">Desaparecido</option>
-          <option value="localizado">Localizado</option>
-        </select>
-      </div>
-    </div>
-  
-    <!-- Botões -->
-    <div class="botoes">
-      <button class="btn limpar" (click)="limpar()">Limpar</button>
-      <button class="btn buscar" (click)="buscar()">Buscar</button>
+    <div class="campo half">
+      <label for="idadeMax">Idade Máxima</label>
+      <input id="idadeMax" type="number" [(ngModel)]="idadeMax" min="0" placeholder="Ex: 60" />
     </div>
   </div>
-  
+
+  <!-- Sexo e Status -->
+  <div class="campo-row">
+    <div class="campo half">
+      <label for="sexo">Sexo</label>
+      <select id="sexo" [(ngModel)]="sexo">
+        <option value="">Todos</option>
+        <option value="M">Masculino</option>
+        <option value="F">Feminino</option>
+      </select>
+    </div>
+    <div class="campo half">
+      <label for="status">Status</label>
+      <select id="status" [(ngModel)]="status">
+        <option value="">Todos</option>
+        <option value="DESAPARECIDO">Desaparecido</option>
+        <option value="LOCALIZADO">Localizado</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Botões -->
+  <div class="botoes">
+    <button class="btn limpar" type="button" (click)="limpar()">Limpar</button>
+    <button class="btn buscar" type="button" (click)="buscar()">Buscar</button>
+  </div>
+</div>
