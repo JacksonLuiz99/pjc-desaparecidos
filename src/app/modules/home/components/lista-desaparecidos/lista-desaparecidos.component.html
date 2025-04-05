@@ -23,10 +23,10 @@
         <mat-card-content class="flex-1 space-y-1">
           <div class="badge-status mb-2"
                [ngClass]="{
-                 'localizado': pessoa.ultimoCorrencia?.encontradoVivo,
-                 'desaparecido': !pessoa.ultimoCorrencia?.encontradoVivo
+                 'localizado': pessoa.ultimaOcorrencia?.encontradoVivo,
+                 'desaparecido': !pessoa.ultimaOcorrencia?.encontradoVivo
                }">
-            {{ pessoa.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
+            {{ pessoa.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
           </div>
 
           <h2 class="text-lg font-semibold text-gray-800">{{ pessoa.nome || 'Nome não informado' }}</h2>
@@ -34,11 +34,11 @@
           <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
           <p *ngIf="pessoa.corOlhos">Cor dos Olhos: {{ pessoa.corOlhos }}</p>
           <p *ngIf="pessoa.corCabelos">Cor dos Cabelos: {{ pessoa.corCabelos }}</p>
-          <p *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento">
-            Desaparecido em: {{ pessoa.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
+          <p *ngIf="pessoa.ultimaOcorrencia?.dtDesaparecimento">
+            Desaparecido em: {{ pessoa.ultimaOcorrencia.dtDesaparecimento | date:'dd/MM/yyyy' }}
           </p>
-          <p *ngIf="pessoa.ultimoCorrencia?.localDesaparecimento">
-            Último local visto: {{ pessoa.ultimoCorrencia.localDesaparecimento }}
+          <p *ngIf="pessoa.ultimaOcorrencia?.localDesaparecimentoConcat">
+            Último local visto: {{ pessoa.ultimaOcorrencia.localDesaparecimentoConcat }}
           </p>
 
           <a mat-button color="primary" class="mt-2 inline-flex items-center gap-1" [routerLink]="['/detalhes', pessoa.id]">
@@ -72,10 +72,10 @@
         <mat-card-content class="flex-1 space-y-1">
           <div class="badge-status mb-2"
                [ngClass]="{
-                 'localizado': desaparecido.ultimoCorrencia?.encontradoVivo,
-                 'desaparecido': !desaparecido.ultimoCorrencia?.encontradoVivo
+                 'localizado': desaparecido.ultimaOcorrencia?.encontradoVivo,
+                 'desaparecido': !desaparecido.ultimaOcorrencia?.encontradoVivo
                }">
-            {{ desaparecido.ultimoCorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
+            {{ desaparecido.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
           </div>
 
           <h2 class="text-lg font-semibold text-gray-800">{{ desaparecido.nome || 'Nome não informado' }}</h2>
@@ -83,11 +83,11 @@
           <p *ngIf="desaparecido.sexo">Sexo: {{ desaparecido.sexo | titlecase }}</p>
           <p *ngIf="desaparecido.corOlhos">Cor dos Olhos: {{ desaparecido.corOlhos }}</p>
           <p *ngIf="desaparecido.corCabelos">Cor dos Cabelos: {{ desaparecido.corCabelos }}</p>
-          <p *ngIf="desaparecido.ultimoCorrencia?.dibesaparecimento">
-            Desaparecido em: {{ desaparecido.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
+          <p *ngIf="desaparecido.ultimaOcorrencia?.dtDesaparecimento">
+            Desaparecido em: {{ desaparecido.ultimaOcorrencia.dtDesaparecimento | date:'dd/MM/yyyy' }}
           </p>
-          <p *ngIf="desaparecido.ultimoCorrencia?.localDesaparecimento">
-            Último local visto: {{ desaparecido.ultimoCorrencia.localDesaparecimento }}
+          <p *ngIf="desaparecido.ultimaOcorrencia?.localDesaparecimentoConcat">
+            Último local visto: {{ desaparecido.ultimaOcorrencia.localDesaparecimentoConcat }}
           </p>
 
           <a mat-button color="primary" class="mt-2 inline-flex items-center gap-1" [routerLink]="['/detalhes', desaparecido.id]">
