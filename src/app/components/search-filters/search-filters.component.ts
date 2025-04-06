@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { forkJoin } from 'rxjs';
-import { DesaparecidosService } from 'src/app/core/services/desaparecidos.service';
+import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
   selector: 'app-search-filters',
@@ -14,11 +14,11 @@ export class SearchFiltersComponent {
   sexo: string = '';
   status: string = '';
 
-  @Output() resultadoBusca = new EventEmitter<any[]>();
+  @Output() resultadoBusca = new EventEmitter<Pessoa[]>();
 
   constructor(private desaparecidosService: DesaparecidosService) {}
 
-  buscar() {
+  buscar(): void {
     const sexoFormatado = this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : '';
     const statusList = this.status ? [this.status] : ['DESAPARECIDO', 'LOCALIZADO'];
 
@@ -40,12 +40,12 @@ export class SearchFiltersComponent {
     });
   }
 
-  limpar() {
+  limpar(): void {
     this.nome = '';
     this.idadeMin = null;
     this.idadeMax = null;
     this.sexo = '';
     this.status = '';
-    this.resultadoBusca.emit([]);
+    this.buscar(); // Buscar com filtros limpos
   }
 }

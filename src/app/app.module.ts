@@ -4,8 +4,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ButtonComponent } from './components/button/button.component';
-import { FooterComponent } from './components/footer/footer.component';
-import { HeaderComponent } from './components/header/header.component';
 import { FormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -15,15 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetalhesPessoaComponent } from './components/detalhes-pessoa/detalhes-pessoa.component';
 import { CommonModule, NgClass } from '@angular/common';
+import { DetalheComponent } from './modules/detalhe/detalhe.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ButtonComponent,
-    FooterComponent,
-    HeaderComponent,
     DetalhesPessoaComponent,
-    
+
   ],
   imports: [
     BrowserModule,
@@ -35,12 +32,12 @@ import { CommonModule, NgClass } from '@angular/common';
 
     // Importa o módulo de paginação do Angular Material
     MatPaginatorModule,
-     BrowserAnimationsModule,
-     MatButtonModule,
-     MatCardModule,
-     MatIconModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
     MatToolbarModule,
-  ],
+],
   providers: [],
   bootstrap: [AppComponent]
 })

@@ -13,13 +13,17 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { DetalheComponent } from '../detalhe/detalhe.component';
+import { HeaderComponent } from 'src/app/components/header/header.component';
+import { FooterComponent } from 'src/app/components/footer/footer.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ListaDesaparecidosComponent,
     SearchFiltersComponent,
-    DetalheComponent
+    DetalheComponent,
+    HeaderComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,

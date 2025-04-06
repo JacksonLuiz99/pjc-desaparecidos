@@ -5,13 +5,15 @@ import { map } from 'rxjs/operators';
 
 const API_URL = 'https://abitus-api.geia.vip/v1';
 
-interface Pessoa {
+export interface Pessoa {
   id: number;
   nome: string;
   idade?: number;
   sexo: string;
   vivo?: boolean;
   urlFoto?: string;
+  corOlhos?: string;
+  corCabelos?: string;
   ultimaOcorrencia?: {
     dtDesaparecimento?: string;
     dataLocalizacao?: string;
@@ -89,7 +91,7 @@ export class DesaparecidosService {
 
   // Dados aleatórios para home
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
-    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico?registros=10`).pipe(
+    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`).pipe(
       map(lista => lista.map(pessoa => this.normalizarPessoa(pessoa)))
     );
   }
@@ -102,14 +104,16 @@ export class DesaparecidosService {
       ...pessoa,
       nome: pessoa.nome || 'Nome não informado',
       sexo: pessoa.sexo || 'Não informado',
-      urlFoto: pessoa.urlFoto || 
-               ultima?.listaCartaz?.[0]?.urlCartaz || 
+      corOlhos: pessoa.corOlhos || undefined,
+      corCabelos: pessoa.corCabelos || undefined,
+      urlFoto: pessoa.urlFoto ||
+               ultima?.listaCartaz?.[0]?.urlCartaz ||
                'assets/imagem-padrao.svg',
-      ultimoCorrencia: {
-        dibesaparecimento: ultima?.dtDesaparecimento,
-        datalocalizacao: ultima?.dataLocalizacao,
+        ultimaOcorrencia: {
+        dtDesaparecimento: ultima?.dtDesaparecimento,
+        dataLocalizacao: ultima?.dataLocalizacao,
         encontradoVivo: ultima?.encontradoVivo,
-        listCartaz: ultima?.listaCartaz?.map(c => ({
+        listaCartaz: ultima?.listaCartaz?.map(c => ({
           urlCartaz: c.urlCartaz,
           tipCartaz: c.tipoCartaz
         }))

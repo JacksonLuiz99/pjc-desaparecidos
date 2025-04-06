@@ -5,35 +5,18 @@
   <!-- Nome -->
   <div class="campo">
     <label for="nome">Nome</label>
-    <input
-      id="nome"
-      type="text"
-      [(ngModel)]="nome"
-      placeholder="Digite o nome da pessoa..."
-    />
+    <input id="nome" type="text" [(ngModel)]="nome" placeholder="Digite o nome da pessoa..." />
   </div>
 
   <!-- Faixa Etária -->
   <div class="campo-row">
     <div class="campo half">
       <label for="idadeMin">Idade Mínima</label>
-      <input
-        id="idadeMin"
-        type="number"
-        [(ngModel)]="idadeMin"
-        min="0"
-        placeholder="Ex: 10"
-      />
+      <input id="idadeMin" type="number" [(ngModel)]="idadeMin" min="0" placeholder="Ex: 10" />
     </div>
     <div class="campo half">
       <label for="idadeMax">Idade Máxima</label>
-      <input
-        id="idadeMax"
-        type="number"
-        [(ngModel)]="idadeMax"
-        min="0"
-        placeholder="Ex: 60"
-      />
+      <input id="idadeMax" type="number" [(ngModel)]="idadeMax" min="0" placeholder="Ex: 60" />
     </div>
   </div>
 
