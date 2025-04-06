@@ -10,7 +10,8 @@
     </div>
 
     <div class="grid-container">
-      <mat-card *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)" class="flex flex-col md:flex-row gap-4 p-4 items-start shadow rounded-xl">
+      <mat-card *ngFor="let pessoa of dadosFiltrados | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)"
+                class="flex flex-col md:flex-row gap-4 p-4 items-start shadow rounded-xl">
         
         <!-- Imagem -->
         <div class="imagem-container w-full md:w-60 overflow-hidden rounded-xl">
@@ -21,13 +22,13 @@
 
         <!-- Conteúdo -->
         <mat-card-content class="flex-1 space-y-1">
-          <div class="badge-status mb-2"
-               [ngClass]="{
-                 'localizado': pessoa.ultimaOcorrencia?.encontradoVivo,
-                 'desaparecido': !pessoa.ultimaOcorrencia?.encontradoVivo
-               }">
+          <span
+            [ngClass]="{
+              'bg-green-500 text-white px-2 py-1 rounded-full text-sm font-semibold': pessoa.ultimaOcorrencia?.encontradoVivo,
+              'bg-yellow-500 text-white px-2 py-1 rounded-full text-sm font-semibold': !pessoa.ultimaOcorrencia?.encontradoVivo
+            }">
             {{ pessoa.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
-          </div>
+          </span>
 
           <h2 class="text-lg font-semibold text-gray-800">{{ pessoa.nome || 'Nome não informado' }}</h2>
           <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
@@ -59,8 +60,9 @@
     </div>
 
     <div class="grid-container">
-      <mat-card *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)" class="flex flex-col md:flex-row gap-4 p-4 items-start shadow rounded-xl">
-        
+      <mat-card *ngFor="let desaparecido of desaparecidos | slice:(paginaAtual * itensPorPagina):(paginaAtual * itensPorPagina + itensPorPagina)"
+                class="flex flex-col md:flex-row gap-4 p-4 items-start shadow rounded-xl">
+
         <!-- Imagem -->
         <div class="imagem-container w-full md:w-60 overflow-hidden rounded-xl">
           <img mat-card-image [src]="desaparecido.urlFoto || 'assets/imagem-padrao.svg'"
@@ -70,13 +72,13 @@
 
         <!-- Conteúdo -->
         <mat-card-content class="flex-1 space-y-1">
-          <div class="badge-status mb-2"
-               [ngClass]="{
-                 'localizado': desaparecido.ultimaOcorrencia?.encontradoVivo,
-                 'desaparecido': !desaparecido.ultimaOcorrencia?.encontradoVivo
-               }">
+          <span
+            [ngClass]="{
+              'bg-green-500 text-white px-2 py-1 rounded-full text-sm font-semibold': desaparecido.ultimaOcorrencia?.encontradoVivo,
+              'bg-yellow-500 text-white px-2 py-1 rounded-full text-sm font-semibold': !desaparecido.ultimaOcorrencia?.encontradoVivo
+            }">
             {{ desaparecido.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
-          </div>
+          </span>
 
           <h2 class="text-lg font-semibold text-gray-800">{{ desaparecido.nome || 'Nome não informado' }}</h2>
           <p *ngIf="desaparecido.idade">Idade: {{ desaparecido.idade }} anos</p>

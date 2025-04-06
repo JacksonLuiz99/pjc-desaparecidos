@@ -7,14 +7,27 @@ const API_URL = 'https://abitus-api.geia.vip/v1';
 
 interface Pessoa {
   id: number;
-  nome?: string;
-  home?: string; // Campo alternativo para nome
+  nome: string;
   idade?: number;
-  sexo?: string;
-  escor?: string; // Campo alternativo para sexo
-  exo?: string;   // Outro campo alternativo para sexo
+  sexo: string;
   vivo?: boolean;
   urlFoto?: string;
+  ultimaOcorrencia?: {
+    dtDesaparecimento?: string;
+    dataLocalizacao?: string;
+    encontradoVivo?: boolean;
+    localDesaparecimentoConcat?: string;
+    ocorrenciaEntrevDesapDTO?: {
+      informacao?: string;
+      vestimentasDesaparecido?: string;
+    };
+    listaCartaz?: Array<{
+      urlCartaz?: string;
+      tipoCartaz?: string;
+    }>;
+    ocoId?: number;
+  };
+  // Campos normalizados
   ultimoCorrencia?: {
     dibesaparecimento?: string;
     datalocalizacao?: string;
@@ -55,13 +68,12 @@ export class DesaparecidosService {
 
     if (nome) params = params.set('nome', nome);
     if (sexo) params = params.set('sexo', sexo);
-    if (faixaIdadeInicial !== undefined && faixaIdadeInicial !== null) {
+    if (faixaIdadeInicial != null) {
       params = params.set('faixaIdadeInicial', faixaIdadeInicial.toString());
     }
-    if (faixaIdadeFinal !== undefined && faixaIdadeFinal !== null) {
+    if (faixaIdadeFinal != null) {
       params = params.set('faixaIdadeFinal', faixaIdadeFinal.toString());
     }
-    
 
     return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params }).pipe(
       map(response => this.normalizarDados(response))
@@ -75,20 +87,33 @@ export class DesaparecidosService {
     );
   }
 
-  // Dados randômicos (para a página inicial)
+  // Dados aleatórios para home
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
-    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico?registros=10`);
+    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico?registros=10`).pipe(
+      map(lista => lista.map(pessoa => this.normalizarPessoa(pessoa)))
+    );
   }
 
   // Normaliza os campos da API para nomes consistentes
   private normalizarPessoa(pessoa: Pessoa): Pessoa {
+    const ultima = pessoa.ultimaOcorrencia;
+
     return {
       ...pessoa,
-      nome: pessoa.nome || pessoa.home || 'Nome não informado',
-      sexo: pessoa.sexo || pessoa.escor || pessoa.exo || 'Não informado',
+      nome: pessoa.nome || 'Nome não informado',
+      sexo: pessoa.sexo || 'Não informado',
       urlFoto: pessoa.urlFoto || 
-               pessoa.ultimoCorrencia?.listCartaz?.[0]?.urlCartaz || 
-               'assets/imagem-padrao.svg'
+               ultima?.listaCartaz?.[0]?.urlCartaz || 
+               'assets/imagem-padrao.svg',
+      ultimoCorrencia: {
+        dibesaparecimento: ultima?.dtDesaparecimento,
+        datalocalizacao: ultima?.dataLocalizacao,
+        encontradoVivo: ultima?.encontradoVivo,
+        listCartaz: ultima?.listaCartaz?.map(c => ({
+          urlCartaz: c.urlCartaz,
+          tipCartaz: c.tipoCartaz
+        }))
+      }
     };
   }
 

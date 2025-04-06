@@ -13,6 +13,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
+import { DetalhesPessoaComponent } from './components/detalhes-pessoa/detalhes-pessoa.component';
+import { CommonModule, NgClass } from '@angular/common';
 
 @NgModule({
   declarations: [
@@ -20,12 +22,16 @@ import { MatToolbarModule } from '@angular/material/toolbar';
     ButtonComponent,
     FooterComponent,
     HeaderComponent,
+    DetalhesPessoaComponent,
+    
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    CommonModule,
+    NgClass,
 
     // Importa o módulo de paginação do Angular Material
     MatPaginatorModule,
@@ -33,7 +39,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
      MatButtonModule,
      MatCardModule,
      MatIconModule,
-      MatToolbarModule,
+    MatToolbarModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

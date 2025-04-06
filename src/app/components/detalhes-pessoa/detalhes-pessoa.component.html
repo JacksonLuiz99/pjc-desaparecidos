@@ -1,0 +1,12 @@
+<div *ngIf="pessoa" class="detalhes-container">
+    <h2>{{ pessoa.nome }}</h2>
+    <img [src]="pessoa.urlFoto" alt="Foto da pessoa" class="foto-detalhes" />
+  
+    <p><strong>Idade:</strong> {{ pessoa.idade || 'Não informada' }}</p>
+    <p><strong>Sexo:</strong> {{ pessoa.sexo || 'Não informado' }}</p>
+    <p><strong>Status:</strong> {{ pessoa.vivo === true ? 'Localizado com vida' : (pessoa.vivo === false ? 'Localizado sem vida' : 'Desaparecido') }}</p>
+  
+    <p *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento"><strong>Data do desaparecimento:</strong> {{ pessoa.ultimoCorrencia.dibesaparecimento }}</p>
+    <p *ngIf="pessoa.ultimoCorrencia?.datalocalizacao"><strong>Data da localização:</strong> {{ pessoa.ultimoCorrencia.datalocalizacao }}</p>
+  </div>
+  

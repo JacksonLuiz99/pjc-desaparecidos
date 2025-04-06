@@ -12,12 +12,14 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { DetalheComponent } from '../detalhe/detalhe.component';
 
 @NgModule({
   declarations: [
     HomeComponent,
     ListaDesaparecidosComponent,
-    SearchFiltersComponent
+    SearchFiltersComponent,
+    DetalheComponent
   ],
   imports: [
     CommonModule,
