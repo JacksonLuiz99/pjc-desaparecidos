@@ -1,12 +1,21 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DetalheComponent} from './modules/detalhe/detalhe.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 
 const routes: Routes = [
-  { path: '', loadChildren: () => import('./modules/home/home.module').then(m => m.HomeModule) },
-  { path: 'detalhes/:id', component: DetalheComponent }
+  {
+    path: 'detalhes/:id',
+    loadChildren: () =>
+      import('./modules/detalhe/detalhe.module').then(m => m.DetalheModule)
+  },
+  {
+    path: '',
+    loadChildren: () =>
+      import('./modules/home/home.module').then(m => m.HomeModule)
+  }
 ];
+
+
 
 @NgModule({
   imports: [RouterModule.forRoot(routes), NgxPaginationModule],

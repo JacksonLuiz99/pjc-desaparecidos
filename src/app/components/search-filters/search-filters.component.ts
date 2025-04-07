@@ -11,24 +11,30 @@ export class SearchFiltersComponent {
   nome: string = '';
   idadeMin: number | null = null;
   idadeMax: number | null = null;
-  sexo: string = '';
-  status: string = '';
+  sexo: string = 'undefined';
+  status: string = 'undefined';
 
   @Output() resultadoBusca = new EventEmitter<Pessoa[]>();
 
   constructor(private desaparecidosService: DesaparecidosService) {}
 
   buscar(): void {
-    const sexoFormatado = this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : '';
-    const statusList = this.status ? [this.status] : ['DESAPARECIDO', 'LOCALIZADO'];
+    const sexoValido =
+      this.sexo === 'M' ? 'MASCULINO' :
+      this.sexo === 'F' ? 'FEMININO' :
+      undefined;
+
+    const statusList = this.status && this.status !== 'undefined'
+      ? [this.status]
+      : ['DESAPARECIDO', 'LOCALIZADO'];
 
     const chamadas = statusList.map(status =>
       this.desaparecidosService.getDesaparecidosPaginados(
         0,
         999,
         status,
-        this.nome?.trim(),
-        sexoFormatado,
+        this.nome?.trim() || undefined,
+        sexoValido,
         this.idadeMin ?? undefined,
         this.idadeMax ?? undefined
       )
@@ -44,8 +50,8 @@ export class SearchFiltersComponent {
     this.nome = '';
     this.idadeMin = null;
     this.idadeMax = null;
-    this.sexo = '';
-    this.status = '';
-    this.buscar(); // Buscar com filtros limpos
+    this.sexo = 'undefined';
+    this.status = 'undefined';
+    this.buscar();
   }
 }

@@ -1,58 +1,97 @@
-<div *ngIf="pessoa as p">
-  <div class="flex items-center gap-4 mt-6">
+<div *ngIf="pessoa as p" class="p-4">
+  <!-- Foto -->
+  <div class="flex justify-center mb-6">
+    <img
+      *ngIf="p.urlFoto"
+      [src]="p.urlFoto"
+      alt="Foto de {{ p.nome }}"
+      class="w-64 h-64 object-cover rounded-2xl shadow-md border"
+    />
+  </div>
+
+  <!-- Status -->
+  <div class="flex items-center gap-4 mt-2">
     <span
-      class="px-3 py-1 rounded-full text-white text-sm font-medium"
-      [ngClass]="{
-        'bg-green-600': p.status === 'LOCALIZADO',
-        'bg-red-600': p.status === 'DESAPARECIDO'
-      }"
+      class="px-4 py-1 rounded-full text-white text-sm font-bold tracking-wide"
+      [ngClass]="statusClasse"
     >
-      {{ p.status }}
+      {{ statusTexto }}
     </span>
   </div>
 
-  <h2 class="text-2xl font-semibold mt-4">{{ p.nome }}</h2>
+  <!-- Nome, idade e sexo -->
+  <h2 class="text-3xl font-bold mt-4">{{ p.nome }}</h2>
 
-  <p class="text-gray-700">
+  <p class="text-gray-700 text-lg mt-1">
     {{ p.idade ? p.idade + ' anos' : 'Idade não informada' }} -
     {{ p.sexo || 'Sexo não informado' }}
   </p>
 
-  <div class="mt-6 space-y-2" *ngIf="p.ultimaOcorrencia as ocorrencia">
+  <!-- Data do desaparecimento com dias -->
+  <div *ngIf="dataDesaparecimento">
+    <p
+      class="mt-4 font-medium"
+      [ngClass]="{
+        'text-green-700': p.status === 'LOCALIZADO',
+        'text-red-700': p.status === 'DESAPARECIDO'
+      }"
+    >
+      {{ p.status === 'LOCALIZADO' ? 'Localizado em' : 'Desaparecido desde' }}
+      {{ dataDesaparecimento }}
+      <span *ngIf="diasDesaparecido !== null && p.status === 'DESAPARECIDO'">
+        ({{ diasDesaparecido }} dias)
+      </span>
+    </p>
+  </div>
+
+  <!-- Ocorrência -->
+  <div class="mt-8" *ngIf="p.ultimaOcorrencia as ocorrencia">
+    <h3 class="text-xl font-semibold mb-2">Ocorrência</h3>
+
+    <p *ngIf="ocorrencia.dtDesaparecimento">
+      <strong>Data de Desaparecimento:</strong>
+      {{ ocorrencia.dtDesaparecimento | date: 'dd/MM/yyyy' }}
+    </p>
+
     <p *ngIf="ocorrencia.localDesaparecimento">
-      <strong>Local:</strong> {{ ocorrencia.localDesaparecimento }}
+      <strong>Local de Desaparecimento:</strong>
+      {{ ocorrencia.localDesaparecimento }}
+    </p>
+
+    <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
+      <strong>Informações:</strong>
+      {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
     </p>
 
     <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido">
       <strong>Vestimentas:</strong>
       {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
     </p>
+  </div>
 
-    <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
-      <strong>Informações adicionais:</strong>
-      {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
-    </p>
+  <!-- Botão de informações -->
+  <div class="mt-6">
+    <button
+      (click)="abrirModalInformacao()"
+      class="bg-red-600 hover:bg-red-700 text-white font-semibold text-base py-2 px-6 rounded-lg shadow flex items-center"
+    >
+      <i class="fas fa-eye mr-2"></i> Viu ou sabe desta pessoa?
+    </button>
+  </div>
 
-    <div *ngIf="ocorrencia.listCartaz as cartazes" class="mt-8" [hidden]="cartazes.length === 0">
-      <h3 class="text-lg font-semibold mb-2">Cartazes</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-        <div
-          *ngFor="let cartaz of cartazes"
-          class="border rounded-xl p-2 shadow-sm bg-white"
-        >
+  <!-- Cartazes -->
+  <div *ngIf="p.ultimaOcorrencia?.listCartaz as cartazes" class="mt-10">
+    <h3 class="text-lg font-semibold mb-2">Cartazes Disponíveis</h3>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+      <div *ngFor="let cartaz of cartazes" class="border rounded-xl p-2 shadow-sm bg-white">
+        <a [href]="cartaz.urlCartaz" download target="_blank">
           <img
             [src]="cartaz.urlCartaz"
             alt="Cartaz"
             class="w-full h-auto rounded"
           />
-        </div>
+        </a>
       </div>
     </div>
-    
-  <button
-    (click)="abrirModalInformacao()"
-    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow"
-  >
-    <i class="fas fa-info-circle mr-2"></i> Enviar informações
-  </button>
-</div>
+  </div>
+  

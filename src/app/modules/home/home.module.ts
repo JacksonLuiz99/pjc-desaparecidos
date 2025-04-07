@@ -12,7 +12,6 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
-import { DetalheComponent } from '../detalhe/detalhe.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -24,7 +23,6 @@ import { MatSelectModule } from '@angular/material/select';
     HomeComponent,
     ListaDesaparecidosComponent,
     SearchFiltersComponent,
-    DetalheComponent,
     HeaderComponent,
     FooterComponent
   ],

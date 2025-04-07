@@ -20,7 +20,7 @@ export interface PessoaDetalhe {
   idade?: number;
   sexo: string;
   vivo?: boolean | null;
-  urlfoto?: string;
+  urlFoto?: string;
   status?: 'DESAPARECIDO' | 'LOCALIZADO';
   ultimaOcorrencia?: UltimaOcorrencia | null;
 }
@@ -33,10 +33,12 @@ export interface PessoaDetalhe {
 export class DetalheComponent implements OnInit {
   pessoa!: PessoaDetalhe;
   diasDesaparecido: number | null = null;
-  mostrarModal: boolean = false;
-  statusTexto: string = '';
-  statusClasse: string = '';
   dataDesaparecimento: string | null = null;
+  mostrarModal = false;
+
+  statusTexto = '';
+  statusClasse = '';
+  erroMensagem: string = ''; // Variável para armazenar mensagens de erro
 
   constructor(
     private route: ActivatedRoute,
@@ -44,13 +46,28 @@ export class DetalheComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const id = Number(this.route.snapshot.paramMap.get('id'));
-    this.desaparecidosService.getDetalhesPessoa(id).subscribe((pessoa) => {
-      console.log('OBJETO PESSOA COMPLETO:', pessoa);
-      this.pessoa = pessoa;
-      this.definirStatus();
-      this.calcularTempoDesaparecido();
-    });
+    const idParam = this.route.snapshot.paramMap.get('id');
+    console.log('ID recebido na rota:', idParam);
+
+    const id = Number(idParam);
+    if (!id) {
+      console.error('ID inválido:', id);
+      this.erroMensagem = 'ID inválido ou ausente. Tente novamente.';
+      return;
+    }
+
+    this.desaparecidosService.getInformacoesCompletasPessoa(id).subscribe(
+      (pessoa) => {
+        console.log('DETALHES COMPLETOS:', pessoa);
+        this.pessoa = pessoa;
+        this.definirStatus();
+        this.calcularTempoDesaparecido();
+      },
+      (error) => {
+        console.error('Erro ao buscar detalhes da pessoa: ', error);
+        this.erroMensagem = 'Erro ao carregar os dados da pessoa. Tente novamente mais tarde.';
+      }
+    );
   }
 
   definirStatus(): void {
@@ -86,7 +103,6 @@ export class DetalheComponent implements OnInit {
 
   abrirModalInformacao(): void {
     console.log('Abrindo modal de envio de informações...');
+    this.mostrarModal = true;
   }
-
-  
 }

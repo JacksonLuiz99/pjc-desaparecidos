@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { PessoaDetalhe } from 'src/app/models/pessoa-detalhe.model';
 
 const API_URL = 'https://abitus-api.geia.vip/v1';
 
@@ -59,7 +59,7 @@ export interface MotivoOcorrencia {
 export class DesaparecidosService {
   constructor(private http: HttpClient) {}
 
-  //  Busca paginada com filtros
+  // 🔍 Busca paginada com filtros
   getDesaparecidosPaginados(
     pagina = 0,
     porPagina = 10,
@@ -82,34 +82,38 @@ export class DesaparecidosService {
     return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params });
   }
 
-  // 👤 Detalhes de uma pessoa
+  //Detalhes simples de uma pessoa
   getDetalhesPessoa(id: number): Observable<Pessoa> {
     return this.http.get<Pessoa>(`${API_URL}/pessoas/${id}`);
   }
+  getInformacoesCompletasPessoa(id: number): Observable<PessoaDetalhe> {
+    return this.http.get<PessoaDetalhe>(`${API_URL}/pessoas/${id}`);
+  }
+  
 
-  //  Lista dinâmica de pessoas desaparecidas para home
+  //Pessoas desaparecidas para exibição dinâmica
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
     return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`);
   }
 
-  //  Estatísticas de desaparecidos/localizados
+  //Estatísticas de desaparecidos e encontrados
   getEstatisticas(): Observable<EstatisticasDesaparecidos> {
     return this.http.get<EstatisticasDesaparecidos>(`${API_URL}/pessoas/aberto/estatistico`);
   }
 
-  //  Informações extras de um desaparecido por ocorrência
+  //Informações extras sobre uma ocorrência
   getInformacoesDesaparecido(ocoId: number): Observable<InformacaoDesaparecido[]> {
     return this.http.get<InformacaoDesaparecido[]>(`${API_URL}/ocorrencias/informacoes-desaparecido`, {
       params: new HttpParams().set('ocoId', ocoId.toString()),
     });
   }
 
-  // 🧾 Motivos de ocorrência
+  //Lista de motivos de ocorrência
   getMotivosOcorrencia(): Observable<MotivoOcorrencia[]> {
     return this.http.get<MotivoOcorrencia[]>(`${API_URL}/ocorrencias/motivos`);
   }
 
-  //  Enviar informações sobre desaparecido
+  //Enviar informações sobre desaparecido
   enviarInformacoesDesaparecido(
     ocoId: number,
     informacao: string,
@@ -127,12 +131,12 @@ export class DesaparecidosService {
     return this.http.post(`${API_URL}/ocorrencias/informacoes-desaparecido`, formData);
   }
 
-  // 🏛 Registrar ocorrência na delegacia digital
+  //Registrar ocorrência digital
   registrarDelegaciaDigital(payload: any): Observable<any> {
     return this.http.post(`${API_URL}/ocorrencias/delegacia-digital`, payload);
   }
 
-  //  Verificar duplicidade de ocorrência
+  //Verificar duplicidade de ocorrência
   verificarDuplicidade(dados: {
     nome: string;
     mae: string;
