@@ -9,7 +9,7 @@ export interface Pessoa {
   id: number;
   nome: string;
   idade?: number;
-  sexo: 'MASCULINO' | 'FEMININO' | string;
+  sexo: 'MASCULINO' | 'FEMININO';
   vivo?: boolean;
   urlFoto?: string;
   ultimaOcorrencia?: {
@@ -29,22 +29,41 @@ export interface Pessoa {
   };
 }
 
-interface RespostaPaginada {
+export interface RespostaPaginada {
   content: Pessoa[];
   totalElements: number;
   number: number;
 }
 
+export interface EstatisticasDesaparecidos {
+  quantPessoasDesaparecidas: number;
+  quantPessoasEncontradas: number;
+}
+
+export interface InformacaoDesaparecido {
+  ocoId: number;
+  informacao: string;
+  data: string;
+  id: number;
+  anexos: string[];
+}
+
+export interface MotivoOcorrencia {
+  id: number;
+  descricao: string;
+}
+
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DesaparecidosService {
   constructor(private http: HttpClient) {}
 
+  // 🔎 Busca paginada com filtros
   getDesaparecidosPaginados(
-    pagina: number = 0,
-    porPagina: number = 10,
-    status: string = 'DESAPARECIDO',
+    pagina = 0,
+    porPagina = 10,
+    status = 'DESAPARECIDO',
     nome?: string,
     sexo?: string,
     faixaIdadeInicial?: number,
@@ -60,46 +79,33 @@ export class DesaparecidosService {
     if (faixaIdadeInicial != null) params = params.set('faixaIdadeInicial', faixaIdadeInicial.toString());
     if (faixaIdadeFinal != null) params = params.set('faixaIdadeFinal', faixaIdadeFinal.toString());
 
-    return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params }).pipe(
-      map(response => this.normalizarDados(response))
-    );
+    return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params });
   }
 
+  // 👤 Detalhes de uma pessoa
   getDetalhesPessoa(id: number): Observable<Pessoa> {
-    return this.http.get<Pessoa>(`${API_URL}/pessoas/${id}`).pipe(
-      map(pessoa => this.normalizarPessoa(pessoa))
-    );
+    return this.http.get<Pessoa>(`${API_URL}/pessoas/${id}`);
   }
 
+  // 🔀 Lista dinâmica de pessoas desaparecidas para home
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
-    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`).pipe(
-      map(lista => lista.map(p => this.normalizarPessoa(p)))
-    );
+    return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`);
   }
 
-  private normalizarPessoa(pessoa: Pessoa): Pessoa {
-    const ultima = pessoa.ultimaOcorrencia;
-
-    return {
-      ...pessoa,
-      nome: pessoa.nome || 'Nome não informado',
-      sexo: pessoa.sexo || 'Não informado',
-      urlFoto: pessoa.urlFoto || ultima?.listaCartaz?.[0]?.urlCartaz || 'assets/imagem-padrao.svg',
-      ultimaOcorrencia: ultima ? {
-        dtDesaparecimento: ultima.dtDesaparecimento,
-        dataLocalizacao: ultima.dataLocalizacao,
-        encontradoVivo: ultima.encontradoVivo,
-        localDesaparecimentoConcat: ultima.localDesaparecimentoConcat,
-        ocorrenciaEntrevDesapDTO: ultima.ocorrenciaEntrevDesapDTO,
-        listaCartaz: ultima.listaCartaz
-      } : undefined
-    };
+  // 📊 Estatísticas de desaparecidos/localizados
+  getEstatisticas(): Observable<EstatisticasDesaparecidos> {
+    return this.http.get<EstatisticasDesaparecidos>(`${API_URL}/pessoas/aberto/estatistico`);
   }
 
-  private normalizarDados(response: RespostaPaginada): RespostaPaginada {
-    return {
-      ...response,
-      content: response.content.map(p => this.normalizarPessoa(p))
-    };
+  // 📄 Informações extras de um desaparecido por ocorrência
+  getInformacoesDesaparecido(ocoId: number): Observable<InformacaoDesaparecido[]> {
+    return this.http.get<InformacaoDesaparecido[]>(`${API_URL}/ocorrencias/informacoes-desaparecido`, {
+      params: new HttpParams().set('ocoId', ocoId.toString()),
+    });
+  }
+
+  // 🧾 Motivos de ocorrência
+  getMotivosOcorrencia(): Observable<MotivoOcorrencia[]> {
+    return this.http.get<MotivoOcorrencia[]>(`${API_URL}/ocorrencias/motivos`);
   }
 }
