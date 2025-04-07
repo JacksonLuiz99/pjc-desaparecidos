@@ -1,7 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { DesaparecidosService } from 'src/app/core/services/desaparecidos.service';
-import { Pessoa } from 'src/app/core/services/desaparecidos.service'; // usando a tipagem correta
+import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
   selector: 'app-lista-desaparecidos',
@@ -9,14 +8,12 @@ import { Pessoa } from 'src/app/core/services/desaparecidos.service'; // usando 
   styleUrls: ['./lista-desaparecidos.component.css']
 })
 export class ListaDesaparecidosComponent implements OnInit {
-  desaparecidos: Pessoa[] = [];
-  dadosFiltrados: Pessoa[] = [];
-  loading = true;
-  error = false;
-
-  totalItens = 0;
+  todasPessoas: Pessoa[] = [];
+  pessoasFiltradas: Pessoa[] = [];
   paginaAtual = 0;
   itensPorPagina = 10;
+  loading = true;
+  error = false;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -28,27 +25,23 @@ export class ListaDesaparecidosComponent implements OnInit {
 
   carregarDados(): void {
     this.loading = true;
-    this.error = false;
-
     this.desaparecidosService.getDesaparecidosAleatorios().subscribe({
-      next: (pessoas) => {
-        this.desaparecidos = pessoas;
-        this.dadosFiltrados = pessoas;
-        this.totalItens = pessoas.length;
+      next: (res) => {
+        this.todasPessoas = res;
+        this.pessoasFiltradas = res;
         this.loading = false;
         if (this.paginator) this.paginator.firstPage();
       },
-      error: (erro) => {
-        console.error('Erro ao carregar dados:', erro);
+      error: (err) => {
+        console.error('Erro ao buscar desaparecidos', err);
         this.loading = false;
         this.error = true;
       }
     });
   }
 
-  atualizarResultados(filtrados: Pessoa[]): void {
-    this.dadosFiltrados = filtrados;
-    this.totalItens = filtrados.length;
+  atualizarResultados(resultados: Pessoa[]): void {
+    this.pessoasFiltradas = resultados.length > 0 ? resultados : this.todasPessoas;
     this.paginaAtual = 0;
     if (this.paginator) this.paginator.firstPage();
   }
@@ -58,18 +51,12 @@ export class ListaDesaparecidosComponent implements OnInit {
     this.paginaAtual = event.pageIndex;
   }
 
-  recarregar(): void {
-    this.carregarDados();
-  }
-
-  get totalPaginas(): number {
-    const total = this.dadosFiltrados.length || this.desaparecidos.length;
-    return Math.ceil(total / this.itensPorPagina);
-  }
-
-  get dadosPaginados(): Pessoa[] {
+  get dadosVisiveis(): Pessoa[] {
     const inicio = this.paginaAtual * this.itensPorPagina;
-    const fim = inicio + this.itensPorPagina;
-    return this.dadosFiltrados.slice(inicio, fim);
+    return this.pessoasFiltradas.slice(inicio, inicio + this.itensPorPagina);
+  }
+
+  get totalItens(): number {
+    return this.pessoasFiltradas.length;
   }
 }

@@ -1,73 +1,72 @@
 <app-header></app-header>
 
-<!-- Filtros de busca -->
 <app-search-filters (resultadoBusca)="atualizarResultados($event)"></app-search-filters>
 
-<!-- Lista de resultados ou padrão -->
 <div class="container mx-auto px-4 py-6">
   <div class="mb-6">
     <h1 class="text-2xl font-bold text-gray-800">
-      {{ dadosFiltrados.length > 0 ? 'Resultados da busca:' : 'Pessoas desaparecidas em MT:' }}
+      {{ pessoasFiltradas.length > 0 ? 'Resultados da busca:' : 'Nenhum resultado encontrado' }}
     </h1>
     <p class="text-sm text-gray-600">
-      {{ dadosFiltrados.length > 0 ? 'Exibindo resultados com base nos filtros aplicados.' : 'Exibindo todos os registros disponíveis.' }}
+      {{ pessoasFiltradas.length > 0 ? 'Veja abaixo os resultados encontrados.' : 'Nenhuma pessoa encontrada com os filtros aplicados.' }}
     </p>
   </div>
 
-  <!-- Lista de pessoas -->
-  <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <ng-container *ngIf="(dadosFiltrados.length > 0 ? dadosPaginados : desaparecidos.slice(paginaAtual * itensPorPagina, (paginaAtual + 1) * itensPorPagina)).length > 0; else nenhumEncontrado">
-      <mat-card *ngFor="let pessoa of dadosFiltrados.length > 0 ? dadosPaginados : desaparecidos.slice(paginaAtual * itensPorPagina, (paginaAtual + 1) * itensPorPagina)"
-                class="p-4 shadow-md rounded-2xl flex flex-col h-full bg-white">
+  <div *ngIf="dadosVisiveis.length > 0; else nenhumResultado" class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+    <mat-card *ngFor="let pessoa of dadosVisiveis"
+              class="p-4 shadow-md rounded-2xl flex flex-col h-full bg-white transition hover:shadow-xl">
+      
+      <!-- Imagem -->
+      <div class="w-full h-64 overflow-hidden rounded-xl mb-4">
+        <img mat-card-image [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'"
+             [alt]="pessoa.nome || 'Desaparecido'"
+             class="w-full h-full object-cover rounded-xl" />
+      </div>
 
-        <!-- Imagem -->
-        <div class="w-full h-64 overflow-hidden rounded-xl mb-4">
-          <img mat-card-image [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'"
-               alt="Foto de {{ pessoa.nome || 'Desaparecido' }}"
-               class="w-full h-full object-cover rounded-xl" />
-        </div>
+      <!-- Conteúdo -->
+      <mat-card-content class="flex-1 flex flex-col space-y-1 text-sm text-gray-700">
+        <span
+          [ngClass]="{
+            'bg-green-600 text-white': pessoa.ultimaOcorrencia?.encontradoVivo,
+            'bg-yellow-500 text-white': !pessoa.ultimaOcorrencia?.encontradoVivo
+          }"
+          class="px-2 py-1 rounded-full text-xs font-semibold self-start">
+          {{ pessoa.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
+        </span>
 
-        <!-- Conteúdo -->
-        <mat-card-content class="flex-1 flex flex-col justify-between space-y-1 text-sm text-gray-700">
-          <span
-            [ngClass]="{
-              'bg-green-500 text-white px-2 py-1 rounded-full text-xs font-semibold self-start': pessoa.ultimaOcorrencia?.encontradoVivo,
-              'bg-yellow-500 text-white px-2 py-1 rounded-full text-xs font-semibold self-start': !pessoa.ultimaOcorrencia?.encontradoVivo
-            }">
-            {{ pessoa.ultimaOcorrencia?.encontradoVivo ? 'LOCALIZADO' : 'DESAPARECIDO' }}
-          </span>
+        <h2 class="text-base font-bold text-gray-800 mt-1">
+          {{ pessoa.nome || 'Nome não informado' }}
+        </h2>
 
-          <h2 class="text-base font-bold text-gray-800 mt-1">{{ pessoa.nome || 'Nome não informado' }}</h2>
+        <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
+        <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
 
-          <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
-          <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
-          <p *ngIf="pessoa.corOlhos">Cor dos Olhos: {{ pessoa.corOlhos }}</p>
-          <p *ngIf="pessoa.corCabelos">Cor dos Cabelos: {{ pessoa.corCabelos }}</p>
-          <p *ngIf="pessoa.ultimaOcorrencia?.dtDesaparecimento">
-            Desaparecido em: {{ pessoa.ultimaOcorrencia?.dtDesaparecimento | date:'dd/MM/yyyy' }}
+        <ng-container *ngIf="pessoa.ultimaOcorrencia as ocorrencia">
+          <p *ngIf="ocorrencia.dtDesaparecimento">
+            Desaparecido em: {{ ocorrencia.dtDesaparecimento | date:'dd/MM/yyyy' }}
           </p>
-          <p *ngIf="pessoa.ultimaOcorrencia?.localDesaparecimentoConcat">
-            Último local visto: {{ pessoa.ultimaOcorrencia?.localDesaparecimentoConcat }}
+          <p *ngIf="ocorrencia.localDesaparecimentoConcat">
+            Último local visto: {{ ocorrencia.localDesaparecimentoConcat }}
           </p>
-          
+        </ng-container>
+        
+        
 
-          <a mat-button color="primary" class="mt-3 inline-flex items-center gap-1 self-start" [routerLink]="['/detalhes', pessoa.id]">
-            <mat-icon>search</mat-icon>
-            Ver detalhes
-          </a>
-        </mat-card-content>
-      </mat-card>
-    </ng-container>
+        <a mat-stroked-button color="primary" class="mt-3 w-fit self-start"
+           [routerLink]="['/detalhes', pessoa.id]">
+          <mat-icon>search</mat-icon>
+          Ver detalhes
+        </a>
+      </mat-card-content>
+    </mat-card>
   </div>
 
-  <!-- Nenhum resultado encontrado -->
-  <ng-template #nenhumEncontrado>
+  <ng-template #nenhumResultado>
     <div class="text-center py-10 text-gray-500">
       <p>Nenhuma pessoa desaparecida encontrada.</p>
     </div>
   </ng-template>
 
-  <!-- Paginação -->
   <div class="mt-8">
     <mat-paginator [length]="totalItens"
                    [pageSize]="itensPorPagina"
