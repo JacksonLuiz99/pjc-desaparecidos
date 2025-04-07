@@ -1,52 +1,58 @@
-<div *ngIf="pessoa" class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden mt-6">
-  <!-- FOTO + STATUS -->
-  <div class="relative">
-    <img 
-      [src]="pessoa.urlFoto" 
-      alt="Foto do desaparecido" 
-      class="w-full h-[450px] object-cover"
-    />
-    <div 
-      class="absolute bottom-0 left-0 right-0 bg-opacity-75 py-2 text-center font-bold text-xl uppercase"
+<div *ngIf="pessoa as p">
+  <div class="flex items-center gap-4 mt-6">
+    <span
+      class="px-3 py-1 rounded-full text-white text-sm font-medium"
       [ngClass]="{
-        'bg-red-600 text-white': pessoa.vivo === undefined,
-        'bg-green-600 text-white': pessoa.vivo !== undefined
+        'bg-green-600': p.status === 'LOCALIZADO',
+        'bg-red-600': p.status === 'DESAPARECIDO'
       }"
     >
-      {{
-        pessoa.vivo === undefined ? 'DESAPARECIDO' :
-        pessoa.vivo ? 'LOCALIZADO (COM VIDA)' :
-        'LOCALIZADO (SEM VIDA)'
-      }}
-    </div>
+      {{ p.status }}
+    </span>
   </div>
 
-  <!-- NOME + DADOS -->
-  <div class="p-6 space-y-4 text-gray-800">
-    <h1 class="text-3xl font-extrabold uppercase text-center">{{ pessoa.nome }}</h1>
-    <p class="text-lg font-medium text-center">{{ pessoa.idade }} anos - {{ pessoa.sexo }}</p>
+  <h2 class="text-2xl font-semibold mt-4">{{ p.nome }}</h2>
 
-    <!-- DADOS SOBRE O DESAPARECIMENTO -->
-    <div class="space-y-2 border-t border-gray-200 pt-4">
-      <h2 class="text-xl font-semibold">Dados sobre o desaparecimento</h2>
-      <p><strong>Data:</strong> {{ pessoa.ultimoCorrencia?.dibesaparecimento | date:'dd/MM/yyyy' }}</p>
-      <p><strong>Local:</strong> {{ pessoa.ultimaOcorrencia?.localDesaparecimentoConcat ?? 'Não informado' }}</p>
-      <p><strong>Vestimenta:</strong> {{ pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido ?? 'Não informada' }}</p>
-      <p><strong>Informações adicionais:</strong> {{ pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.informacao ?? 'Não informada' }}</p>
-      <p *ngIf="diasDesaparecido !== null">
-        <strong>Tempo desaparecido:</strong>
-        <span class="text-red-600 font-bold uppercase">Desaparecido há {{ diasDesaparecido }} dia{{ diasDesaparecido > 1 ? 's' : '' }}!</span>
-      </p>
-    </div>
+  <p class="text-gray-700">
+    {{ p.idade ? p.idade + ' anos' : 'Idade não informada' }} -
+    {{ p.sexo || 'Sexo não informado' }}
+  </p>
 
-    <!-- BOTÃO ENVIAR INFORMAÇÕES -->
-    <div class="text-center mt-6">
-      <button 
-        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl text-lg shadow"
-        (click)="abrirModal()"
-      >
-        Enviar Informações
-      </button>
+  <div class="mt-6 space-y-2" *ngIf="p.ultimaOcorrencia as ocorrencia">
+    <p *ngIf="ocorrencia.localDesaparecimento">
+      <strong>Local:</strong> {{ ocorrencia.localDesaparecimento }}
+    </p>
+
+    <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido">
+      <strong>Vestimentas:</strong>
+      {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
+    </p>
+
+    <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
+      <strong>Informações adicionais:</strong>
+      {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
+    </p>
+
+    <div *ngIf="ocorrencia.listCartaz as cartazes" class="mt-8" [hidden]="cartazes.length === 0">
+      <h3 class="text-lg font-semibold mb-2">Cartazes</h3>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div
+          *ngFor="let cartaz of cartazes"
+          class="border rounded-xl p-2 shadow-sm bg-white"
+        >
+          <img
+            [src]="cartaz.urlCartaz"
+            alt="Cartaz"
+            class="w-full h-auto rounded"
+          />
+        </div>
+      </div>
     </div>
-  </div>
+    
+  <button
+    (click)="abrirModalInformacao()"
+    class="mt-6 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded shadow"
+  >
+    <i class="fas fa-info-circle mr-2"></i> Enviar informações
+  </button>
 </div>
