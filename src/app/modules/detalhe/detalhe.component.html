@@ -1,66 +1,52 @@
-<div *ngIf="pessoa" class="max-w-2xl mx-auto bg-white shadow-lg rounded-2xl p-6 mt-6">
-    <h2 class="text-2xl font-bold text-center text-gray-800 mb-4">{{ pessoa.nome }}</h2>
-  
-    <div class="flex justify-center mb-4">
-      <img 
-        [src]="pessoa.urlFoto" 
-        alt="Foto da pessoa" 
-        class="w-40 h-40 object-cover rounded-full border-4 border-indigo-500 shadow-md" />
-    </div>
-  
-    <div class="space-y-2 text-gray-700">
-      <p><strong>Idade:</strong> {{ pessoa.idade ?? 'Não informada' }}</p>
-      <p><strong>Sexo:</strong> {{ pessoa.sexo ?? 'Não informado' }}</p>
-      <p>
-        <strong>Status:</strong>
-        <span 
-          class="inline-block px-2 py-1 rounded text-white text-sm"
-          [ngClass]="{
-            'bg-green-500': pessoa.vivo === true,
-            'bg-red-500': pessoa.vivo === false,
-            'bg-yellow-500': pessoa.vivo === undefined
-          }"
-        >
-          {{
-            pessoa.vivo === true ? 'Localizado com vida' :
-            pessoa.vivo === false ? 'Localizado sem vida' :
-            'Desaparecido'
-          }}
-        </span>
-      </p>
-  
-      <p *ngIf="pessoa.ultimoCorrencia?.dibesaparecimento">
-        <strong>Data do desaparecimento:</strong> {{ pessoa.ultimoCorrencia.dibesaparecimento | date:'dd/MM/yyyy' }}
-      </p>
-  
-      <p *ngIf="pessoa.ultimoCorrencia?.datalocalizacao">
-        <strong>Data da localização:</strong> {{ pessoa.ultimoCorrencia.datalocalizacao | date:'dd/MM/yyyy' }}
-      </p>
-  
-      <p *ngIf="pessoa.ultimaOcorrencia?.localDesaparecimentoConcat">
-        <strong>Local do desaparecimento:</strong> {{ pessoa.ultimaOcorrencia.localDesaparecimentoConcat }}
-      </p>
-  
-      <p *ngIf="pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido">
-        <strong>Vestimentas:</strong> {{ pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO.vestimentasDesaparecido }}
-      </p>
-  
-      <p *ngIf="pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.informacao">
-        <strong>Informações adicionais:</strong> {{ pessoa.ultimaOcorrencia.ocorrenciaEntrevDesapDTO.informacao }}
-      </p>
-    </div>
-  
-    <div *ngIf="pessoa.ultimoCorrencia?.listCartaz?.length" class="mt-6">
-      <h3 class="text-lg font-semibold text-gray-800 mb-2">Cartazes disponíveis</h3>
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <div *ngFor="let cartaz of pessoa.ultimoCorrencia.listCartaz" class="bg-gray-100 p-2 rounded shadow">
-          <img 
-            [src]="cartaz.urlCartaz" 
-            alt="Cartaz" 
-            class="w-full h-60 object-cover rounded mb-2" />
-          <p class="text-sm text-gray-600 text-center">{{ cartaz.tipCartaz ?? 'Tipo não informado' }}</p>
-        </div>
-      </div>
+<div *ngIf="pessoa" class="max-w-3xl mx-auto bg-white shadow-xl rounded-2xl overflow-hidden mt-6">
+  <!-- FOTO + STATUS -->
+  <div class="relative">
+    <img 
+      [src]="pessoa.urlFoto" 
+      alt="Foto do desaparecido" 
+      class="w-full h-[450px] object-cover"
+    />
+    <div 
+      class="absolute bottom-0 left-0 right-0 bg-opacity-75 py-2 text-center font-bold text-xl uppercase"
+      [ngClass]="{
+        'bg-red-600 text-white': pessoa.vivo === undefined,
+        'bg-green-600 text-white': pessoa.vivo !== undefined
+      }"
+    >
+      {{
+        pessoa.vivo === undefined ? 'DESAPARECIDO' :
+        pessoa.vivo ? 'LOCALIZADO (COM VIDA)' :
+        'LOCALIZADO (SEM VIDA)'
+      }}
     </div>
   </div>
-  
+
+  <!-- NOME + DADOS -->
+  <div class="p-6 space-y-4 text-gray-800">
+    <h1 class="text-3xl font-extrabold uppercase text-center">{{ pessoa.nome }}</h1>
+    <p class="text-lg font-medium text-center">{{ pessoa.idade }} anos - {{ pessoa.sexo }}</p>
+
+    <!-- DADOS SOBRE O DESAPARECIMENTO -->
+    <div class="space-y-2 border-t border-gray-200 pt-4">
+      <h2 class="text-xl font-semibold">Dados sobre o desaparecimento</h2>
+      <p><strong>Data:</strong> {{ pessoa.ultimoCorrencia?.dibesaparecimento | date:'dd/MM/yyyy' }}</p>
+      <p><strong>Local:</strong> {{ pessoa.ultimaOcorrencia?.localDesaparecimentoConcat ?? 'Não informado' }}</p>
+      <p><strong>Vestimenta:</strong> {{ pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido ?? 'Não informada' }}</p>
+      <p><strong>Informações adicionais:</strong> {{ pessoa.ultimaOcorrencia?.ocorrenciaEntrevDesapDTO?.informacao ?? 'Não informada' }}</p>
+      <p *ngIf="diasDesaparecido !== null">
+        <strong>Tempo desaparecido:</strong>
+        <span class="text-red-600 font-bold uppercase">Desaparecido há {{ diasDesaparecido }} dia{{ diasDesaparecido > 1 ? 's' : '' }}!</span>
+      </p>
+    </div>
+
+    <!-- BOTÃO ENVIAR INFORMAÇÕES -->
+    <div class="text-center mt-6">
+      <button 
+        class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-2 rounded-xl text-lg shadow"
+        (click)="abrirModal()"
+      >
+        Enviar Informações
+      </button>
+    </div>
+  </div>
+</div>

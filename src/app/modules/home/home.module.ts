@@ -15,6 +15,9 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { DetalheComponent } from '../detalhe/detalhe.component';
 import { HeaderComponent } from 'src/app/components/header/header.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 
 @NgModule({
   declarations: [
@@ -38,6 +41,10 @@ import { FooterComponent } from 'src/app/components/footer/footer.component';
     MatButtonModule,
     MatIconModule,
     MatPaginatorModule,
+    MatInputModule,
+    MatFormFieldModule,
+    MatSelectModule,
+    MatButtonModule,
   ],
   exports: [ListaDesaparecidosComponent] // Adicione esta linha se o componente for usado fora do módulo
 })

@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetalhesPessoaComponent } from './components/detalhes-pessoa/detalhes-pessoa.component';
 import { CommonModule, NgClass } from '@angular/common';
-import { DetalheComponent } from './modules/detalhe/detalhe.component';
 
 @NgModule({
   declarations: [
