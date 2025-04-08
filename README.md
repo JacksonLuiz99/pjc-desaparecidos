@@ -1,27 +1,60 @@
-# PjcDesaparecidos
+# Projeto: Consulta de Pessoas Desaparecidas - PJC-MT
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.2.16.
+Este projeto foi desenvolvido como parte do processo seletivo da **SEPLAG/UFMT - Edital nº 003/2024**, para o cargo de **Analista de TI - Perfil Júnior**.  
+A aplicação permite consultar pessoas desaparecidas utilizando os dados públicos da API da **Polícia Judiciária Civil do Estado de Mato Grosso (PJC-MT)**.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## 👤 Dados do Candidato
 
-## Code scaffolding
+- **Nome:** JACKSON LUIZ DOMINGOS SILVA  
+- **Inscrição:** 8593  
+- **E-mail:** jacksoncuiaba99@gmail.com  
+- **Telefone fixo:** (65) 3613-5637  
+- **Celular:** (65) 99916-1859  
+- **Data da Inscrição:** 31/03/2025 às 17:41:12  
+- **Pessoa com deficiência (PCD):** Não
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+---
 
-## Build
+## 🛠️ Tecnologias utilizadas
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+- **Angular 16**
+- **TypeScript**
+- **Tailwind CSS**
+- **Angular Material**
+- **HTML5/CSS3**
+- **RxJS**
+- **API PJC-MT**: [https://abitus-api.geia.vip/swagger-ui/index.html](https://abitus-api.geia.vip/swagger-ui/index.html)
+- **Docker** (opcional para execução com container)
+- **Node.js e NPM** (ambiente de desenvolvimento local)
 
-## Running unit tests
+---
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## 🚀 Funcionalidades
 
-## Running end-to-end tests
+- Listagem paginada de pessoas desaparecidas
+- Filtro por nome, idade, sexo e status
+- Detalhamento de cada pessoa desaparecida
+- Exibição da foto, status, local e data do desaparecimento
+- Envio de informações relevantes via formulário (integrado à API)
+- Responsividade e acessibilidade
+- Layout moderno com Tailwind + Material Design
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+---
 
-## Further help
+## 📦 Como executar o projeto localmente
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### 1. Pré-requisitos
+
+- [Node.js](https://nodejs.org/) (versão 18+ recomendada)
+- [Angular CLI](https://angular.io/cli) instalado globalmente:
+  ```bash
+  npm install -g @angular/cli
+
+# Clone o repositório, instale as dependências e execute a aplicação
+git clone https://github.com/seu-usuario/pjc-desaparecidos.git && \
+cd pjc-desaparecidos && \
+npm install && \
+ng serve
+👉 http://localhost:4200
