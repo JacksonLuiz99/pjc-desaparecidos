@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DesaparecidosService } from 'src/app/core/services/desaparecidos.service';
 import { differenceInDays, parseISO } from 'date-fns';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalInformacaoComponent } from 'src/app/components/modal-informacao/modal-informacao.component';
 
 export interface UltimaOcorrencia {
   localDesaparecimento?: string;
   dtDesaparecimento?: string;
   encontradoVivo?: boolean;
+  ocoId?: number;
   ocorrenciaEntrevDesapDTO?: {
     vestimentasDesaparecido?: string;
     informacao?: string;
@@ -34,7 +37,6 @@ export class DetalheComponent implements OnInit {
   pessoa!: PessoaDetalhe;
   diasDesaparecido: number | null = null;
   dataDesaparecimento: string | null = null;
-  mostrarModal = false;
 
   statusTexto = '';
   statusClasse = '';
@@ -42,7 +44,8 @@ export class DetalheComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private desaparecidosService: DesaparecidosService
+    private desaparecidosService: DesaparecidosService,
+    private dialog: MatDialog
   ) {}
 
   ngOnInit(): void {
@@ -97,6 +100,15 @@ export class DetalheComponent implements OnInit {
   }
 
   abrirModalInformacao(): void {
-    this.mostrarModal = true;
+    const ocoId = this.pessoa?.ultimaOcorrencia?.ocoId;
+    if (!ocoId) {
+      alert('ID da ocorrência não encontrado.');
+      return;
+    }
+
+    this.dialog.open(ModalInformacaoComponent, {
+      width: '600px',
+      data: { ocoId: ocoId }
+    });
   }
 }

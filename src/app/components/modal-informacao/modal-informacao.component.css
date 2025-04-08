@@ -1,0 +1,103 @@
+/* Container principal */
+:host {
+    display: block;
+    background-color: #ffffff;
+    border-radius: 1rem;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    max-width: 100%;
+  }
+  
+  /* Título */
+  h2 {
+    color: #1f2937; /* gray-800 */
+    font-size: 1.25rem;
+    font-weight: 700;
+  }
+  
+  /* Inputs */
+  input[type='date'],
+  textarea,
+  input[type='file'] {
+    border: 1px solid #d1d5db; /* gray-300 */
+    border-radius: 0.5rem;
+    padding: 0.5rem;
+    width: 100%;
+    font-size: 0.95rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  input[type='date']:focus,
+  textarea:focus {
+    outline: none;
+    border-color: #2563eb; /* blue-600 */
+    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+  }
+  
+  /* Labels */
+  label {
+    color: #111827; /* gray-900 */
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+    display: block;
+  }
+  
+  /* Botões */
+  button {
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+  
+  button[type='submit'] {
+    background-color: #991b1b; /* red-800 */
+    color: white;
+    border-radius: 0.5rem;
+  }
+  
+  button[type='submit']:hover {
+    background-color: #7f1d1d; /* red-900 */
+  }
+  
+  button[type='button'] {
+    background-color: #e5e7eb; /* gray-200 */
+    color: #1f2937;
+    border-radius: 0.5rem;
+  }
+  
+  button[type='button']:hover {
+    background-color: #d1d5db; /* gray-300 */
+  }
+  
+  /* Mensagens de feedback */
+  .text-green-600 {
+    color: #16a34a; /* green-600 */
+    font-weight: 500;
+  }
+  
+  .text-red-600 {
+    color: #dc2626; /* red-600 */
+    font-weight: 500;
+  }
+  
+  /* Erros de validação */
+  .text-red-500 {
+    margin-top: 0.25rem;
+  }
+  
+  /* Responsividade */
+  @media (max-width: 480px) {
+    h2 {
+      font-size: 1.1rem;
+    }
+  
+    button {
+      width: 100%;
+    }
+  
+    .flex {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+  }
+  

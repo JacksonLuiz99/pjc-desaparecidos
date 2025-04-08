@@ -4,7 +4,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 import { ButtonComponent } from './components/button/button.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,6 +14,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetalhesPessoaComponent } from './components/detalhes-pessoa/detalhes-pessoa.component';
 import { CommonModule, NgClass } from '@angular/common';
 import { ModalInformacaoComponent } from './components/modal-informacao/modal-informacao.component';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 @NgModule({
   declarations: [
@@ -21,7 +22,6 @@ import { ModalInformacaoComponent } from './components/modal-informacao/modal-in
     ButtonComponent,
     DetalhesPessoaComponent,
     ModalInformacaoComponent,
-
   ],
   imports: [
     BrowserModule,
@@ -30,15 +30,17 @@ import { ModalInformacaoComponent } from './components/modal-informacao/modal-in
     FormsModule,
     CommonModule,
     NgClass,
+    ReactiveFormsModule,
 
-    // Importa o módulo de paginação do Angular Material
+    // Angular Material
+    MatDialogModule,
     MatPaginatorModule,
     BrowserAnimationsModule,
     MatButtonModule,
     MatCardModule,
     MatIconModule,
     MatToolbarModule,
-],
+  ],
   providers: [],
   bootstrap: [AppComponent]
 })

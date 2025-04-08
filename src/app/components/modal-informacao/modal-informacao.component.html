@@ -1,1 +1,54 @@
-<p>modal-informacao works!</p>
+<div class="p-6 bg-white rounded-xl w-full max-w-lg mx-auto">
+    <h2 class="text-xl font-bold mb-4">Você tem informações sobre esta pessoa?</h2>
+  
+    <form [formGroup]="form" (ngSubmit)="enviar()" class="space-y-4">
+      <!-- Informações -->
+      <div>
+        <label class="block font-medium mb-1">Informações *</label>
+        <textarea
+          rows="4"
+          class="w-full border rounded-lg p-2"
+          formControlName="informacao"
+          placeholder="Descreva o que você sabe..."
+        ></textarea>
+        <div *ngIf="form.get('informacao')?.invalid && form.get('informacao')?.touched" class="text-red-500 text-sm">
+          Campo obrigatório.
+        </div>
+      </div>
+  
+      <!-- Data -->
+      <div>
+        <label class="block font-medium mb-1">Data *</label>
+        <input type="date" class="w-full border rounded-lg p-2" formControlName="data" />
+        <div *ngIf="form.get('data')?.invalid && form.get('data')?.touched" class="text-red-500 text-sm">
+          Campo obrigatório.
+        </div>
+      </div>
+  
+      <!-- Anexos -->
+      <div>
+        <label class="block font-medium mb-1">Anexos (opcional)</label>
+        <input type="file" multiple (change)="onFileChange($event)" />
+        <p class="text-sm text-gray-600 mt-1" *ngIf="selectedFiles.length">
+          {{ selectedFiles.length }} arquivo(s) selecionado(s).
+        </p>
+      </div>
+  
+      <!-- Botões -->
+      <div class="flex justify-end gap-3 pt-4">
+        <button type="button" class="px-4 py-2 bg-gray-300 rounded-lg" (click)="cancelar()">Cancelar</button>
+        <button
+          type="submit"
+          [disabled]="loading"
+          class="px-6 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+        >
+          {{ loading ? 'Enviando...' : 'Enviar' }}
+        </button>
+      </div>
+    </form>
+  
+    <!-- Feedback -->
+    <p class="text-green-600 mt-4" *ngIf="sucesso">Informações enviadas com sucesso!</p>
+    <p class="text-red-600 mt-4" *ngIf="erro">Erro ao enviar. Tente novamente.</p>
+  </div>
+  
