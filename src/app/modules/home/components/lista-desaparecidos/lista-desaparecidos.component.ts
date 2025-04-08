@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
-import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecidos.service';
+import { DesaparecidosService, Pessoa, RespostaPaginada } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
   selector: 'app-lista-desaparecidos',
@@ -8,10 +8,10 @@ import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecido
   styleUrls: ['./lista-desaparecidos.component.css']
 })
 export class ListaDesaparecidosComponent implements OnInit {
-  todasPessoas: Pessoa[] = [];
   pessoasFiltradas: Pessoa[] = [];
   paginaAtual = 0;
   itensPorPagina = 10;
+  totalItens = 0;
   loading = true;
   error = false;
 
@@ -27,13 +27,14 @@ export class ListaDesaparecidosComponent implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.desaparecidosService.getDesaparecidosAleatorios().subscribe({
-      next: (res: Pessoa[]) => {
-        this.todasPessoas = res;
-        this.pessoasFiltradas = res;
+    this.desaparecidosService.getDesaparecidosPaginados(
+      this.paginaAtual,
+      this.itensPorPagina
+    ).subscribe({
+      next: (res: RespostaPaginada) => {
+        this.pessoasFiltradas = res.content;
+        this.totalItens = res.totalElements;
         this.loading = false;
-        this.paginaAtual = 0;
-        this.paginator?.firstPage();
       },
       error: (err) => {
         console.error('Erro ao buscar desaparecidos', err);
@@ -44,7 +45,8 @@ export class ListaDesaparecidosComponent implements OnInit {
   }
 
   atualizarResultados(resultados: Pessoa[]): void {
-    this.pessoasFiltradas = resultados.length ? resultados : this.todasPessoas;
+    this.pessoasFiltradas = resultados;
+    this.totalItens = resultados.length;
     this.paginaAtual = 0;
     this.paginator?.firstPage();
   }
@@ -52,15 +54,7 @@ export class ListaDesaparecidosComponent implements OnInit {
   onPaginaChange(event: PageEvent): void {
     this.itensPorPagina = event.pageSize;
     this.paginaAtual = event.pageIndex;
-  }
-
-  get dadosVisiveis(): Pessoa[] {
-    const inicio = this.paginaAtual * this.itensPorPagina;
-    return this.pessoasFiltradas.slice(inicio, inicio + this.itensPorPagina);
-  }
-
-  get totalItens(): number {
-    return this.pessoasFiltradas.length;
+    this.carregarDados(); // recarrega os dados com nova página
   }
 
   getStatus(pessoa: Pessoa): { texto: string, classe: string } {

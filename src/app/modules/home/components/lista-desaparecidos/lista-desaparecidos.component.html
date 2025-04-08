@@ -13,9 +13,9 @@
   </div>
 
   <!-- Cards -->
-  <div *ngIf="dadosVisiveis.length > 0; else nenhumResultado"
+  <div *ngIf="pessoasFiltradas.length > 0; else nenhumResultado"
        class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <mat-card *ngFor="let pessoa of dadosVisiveis"
+    <mat-card *ngFor="let pessoa of pessoasFiltradas"
               class="relative p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition flex flex-col h-full animate-fadeIn cursor-pointer"
               [routerLink]="['/detalhes', pessoa.id]">
 
