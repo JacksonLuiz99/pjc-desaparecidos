@@ -13,12 +13,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DetalhesPessoaComponent } from './components/detalhes-pessoa/detalhes-pessoa.component';
 import { CommonModule, NgClass } from '@angular/common';
+import { ModalInformacaoComponent } from './components/modal-informacao/modal-informacao.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ButtonComponent,
     DetalhesPessoaComponent,
+    ModalInformacaoComponent,
 
   ],
   imports: [
