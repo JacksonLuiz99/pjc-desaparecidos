@@ -59,11 +59,11 @@ export interface MotivoOcorrencia {
 export class DesaparecidosService {
   constructor(private http: HttpClient) {}
 
-  // ✅ Busca paginada com filtros (novo endpoint correto)
+  //Busca paginada com filtros (novo endpoint correto)
   getDesaparecidosPaginados(
     pagina = 0,
     porPagina = 10,
-    status = 'DESAPARECIDO',
+    status?: string,
     nome?: string,
     sexo?: string,
     faixaIdadeInicial?: number,
@@ -71,50 +71,51 @@ export class DesaparecidosService {
   ): Observable<RespostaPaginada> {
     let params = new HttpParams()
       .set('pagina', pagina.toString())
-      .set('porPagina', porPagina.toString())
-      .set('status', status);
-
+      .set('porPagina', porPagina.toString());
+  
+    if (status) params = params.set('status', status);
     if (nome) params = params.set('nome', nome);
     if (sexo) params = params.set('sexo', sexo);
     if (faixaIdadeInicial != null) params = params.set('faixaIdadeInicial', faixaIdadeInicial.toString());
     if (faixaIdadeFinal != null) params = params.set('faixaIdadeFinal', faixaIdadeFinal.toString());
-
+  
     return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params });
   }
+  
 
-  // 🔎 Detalhes simples
+  //Detalhes simples
   getDetalhesPessoa(id: number): Observable<Pessoa> {
     return this.http.get<Pessoa>(`${API_URL}/pessoas/${id}`);
   }
 
-  // 🔎 Detalhes completos
+  //Detalhes completos
   getInformacoesCompletasPessoa(id: number): Observable<PessoaDetalhe> {
     return this.http.get<PessoaDetalhe>(`${API_URL}/pessoas/${id}`);
   }
 
-  // 🔁 Exibição aleatória (não recomendado mais)
+  //Exibição aleatória (não recomendado mais)
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
     return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`);
   }
 
-  // 📊 Estatísticas
+  //Estatísticas
   getEstatisticas(): Observable<EstatisticasDesaparecidos> {
     return this.http.get<EstatisticasDesaparecidos>(`${API_URL}/pessoas/aberto/estatistico`);
   }
 
-  // ℹ️ Informações extras de ocorrência
+  //Informações extras de ocorrência
   getInformacoesDesaparecido(ocoId: number): Observable<InformacaoDesaparecido[]> {
     return this.http.get<InformacaoDesaparecido[]>(`${API_URL}/ocorrencias/informacoes-desaparecido`, {
       params: new HttpParams().set('ocoId', ocoId.toString()),
     });
   }
 
-  // 📋 Lista de motivos de ocorrência
+  //Lista de motivos de ocorrência
   getMotivosOcorrencia(): Observable<MotivoOcorrencia[]> {
     return this.http.get<MotivoOcorrencia[]>(`${API_URL}/ocorrencias/motivos`);
   }
 
-  // 📤 Enviar informação sobre desaparecido
+  //Enviar informação sobre desaparecido
   enviarInformacoesDesaparecido(
     ocoId: number,
     informacao: string,
@@ -131,12 +132,12 @@ export class DesaparecidosService {
     return this.http.post(`${API_URL}/ocorrencias/informacoes-desaparecido`, formData);
   }
 
-  // 📝 Registrar ocorrência digital
+  //Registrar ocorrência digital
   registrarDelegaciaDigital(payload: any): Observable<any> {
     return this.http.post(`${API_URL}/ocorrencias/delegacia-digital`, payload);
   }
 
-  // 🔎 Verificar duplicidade
+  //Verificar duplicidade
   verificarDuplicidade(dados: {
     nome: string;
     mae: string;

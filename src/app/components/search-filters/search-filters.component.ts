@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { forkJoin } from 'rxjs';
 import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecidos.service';
 
 @Component({
@@ -24,25 +23,18 @@ export class SearchFiltersComponent {
       this.sexo === 'F' ? 'FEMININO' :
       undefined;
 
-    const statusList = this.status && this.status !== 'undefined'
-      ? [this.status]
-      : ['DESAPARECIDO', 'LOCALIZADO'];
+    const statusValido = this.status !== 'undefined' ? this.status : undefined;
 
-    const chamadas = statusList.map(status =>
-      this.desaparecidosService.getDesaparecidosPaginados(
-        0,
-        999,
-        status,
-        this.nome?.trim() || undefined,
-        sexoValido,
-        this.idadeMin ?? undefined,
-        this.idadeMax ?? undefined
-      )
-    );
-
-    forkJoin(chamadas).subscribe(resultados => {
-      const unificado = resultados.flatMap(r => r.content);
-      this.resultadoBusca.emit(unificado);
+    this.desaparecidosService.getDesaparecidosPaginados(
+      0,
+      999,
+      statusValido,
+      this.nome?.trim() || undefined,
+      sexoValido,
+      this.idadeMin ?? undefined,
+      this.idadeMax ?? undefined
+    ).subscribe(resultado => {
+      this.resultadoBusca.emit(resultado.content);
     });
   }
 

@@ -6,8 +6,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { ModalInformacaoComponent } from 'src/app/components/modal-informacao/modal-informacao.component';
 
 export interface UltimaOcorrencia {
-  localDesaparecimento?: string;
+  localDesaparecimentoConcat?: string;
   dtDesaparecimento?: string;
+  dataLocalizacao?: string;
   encontradoVivo?: boolean;
   ocoId?: number;
   ocorrenciaEntrevDesapDTO?: {
@@ -71,13 +72,12 @@ export class DetalheComponent implements OnInit {
   }
 
   definirStatus(): void {
-    if (this.pessoa.vivo === true) {
-      this.statusTexto = 'Localizado com vida';
+    const ultima = this.pessoa.ultimaOcorrencia;
+  
+    if (ultima?.dataLocalizacao) {
+      this.statusTexto = 'Localizado';
       this.statusClasse = 'bg-green-500';
-    } else if (this.pessoa.vivo === false) {
-      this.statusTexto = 'Localizado sem vida';
-      this.statusClasse = 'bg-red-700';
-    } else if (this.pessoa.ultimaOcorrencia?.dtDesaparecimento) {
+    } else if (ultima?.dtDesaparecimento) {
       this.statusTexto = 'Desaparecido';
       this.statusClasse = 'bg-red-500';
     } else {
@@ -85,6 +85,7 @@ export class DetalheComponent implements OnInit {
       this.statusClasse = 'bg-gray-400';
     }
   }
+  
 
   calcularTempoDesaparecido(): void {
     const dataDesap = this.pessoa.ultimaOcorrencia?.dtDesaparecimento;

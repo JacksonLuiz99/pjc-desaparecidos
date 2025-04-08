@@ -27,23 +27,26 @@
       {{ p.sexo || 'Sexo não informado' }}
     </p>
 
-    <!-- Data desaparecimento -->
-    <div *ngIf="dataDesaparecimento" class="mt-2">
-      <p
-        class="text-sm sm:text-base font-medium"
-        [ngClass]="{
-          'text-green-600': p.status === 'LOCALIZADO',
-          'text-red-600': p.status === 'DESAPARECIDO'
-        }"
-      >
-        {{ p.status === 'LOCALIZADO' ? 'Localizado em' : 'Desaparecido desde' }}
-        {{ dataDesaparecimento }}
-        <span *ngIf="diasDesaparecido !== null && p.status === 'DESAPARECIDO'">
-          ({{ diasDesaparecido }} dias)
-        </span>
-      </p>
-    </div>
-  </div>
+    <!-- Status de desaparecimento/localização -->
+<div *ngIf="p.ultimaOcorrencia" class="mt-2">
+  <p
+    class="text-sm sm:text-base font-medium"
+    [ngClass]="{
+      'text-green-600': p.ultimaOcorrencia.dataLocalizacao,
+      'text-red-600': !p.ultimaOcorrencia.dataLocalizacao
+    }"
+  >
+    <ng-container *ngIf="p.ultimaOcorrencia.dataLocalizacao; else desaparecido">
+      Localizado em {{ p.ultimaOcorrencia.dataLocalizacao | date: 'dd/MM/yyyy' }}
+    </ng-container>
+
+    <ng-template #desaparecido>
+      Desaparecido desde {{ dataDesaparecimento }}
+      <span *ngIf="diasDesaparecido !== null">({{ diasDesaparecido }} dias)</span>
+    </ng-template>
+  </p>
+</div>
+
 
   <!-- Seção de Ocorrência -->
   <div *ngIf="p.ultimaOcorrencia as ocorrencia" class="mt-10">
@@ -53,12 +56,13 @@
 
     <div class="space-y-2 text-gray-700">
       <p *ngIf="ocorrencia.dtDesaparecimento">
-        <strong>Data:</strong> {{ ocorrencia.dtDesaparecimento | date: 'dd/MM/yyyy' }}
+        <strong>Data do desaparecimento:</strong> {{ ocorrencia.dtDesaparecimento | date: 'dd/MM/yyyy' }}
       </p>
 
-      <p *ngIf="ocorrencia.localDesaparecimento">
-        <strong>Local:</strong> {{ ocorrencia.localDesaparecimento }}
+      <p *ngIf="ocorrencia.localDesaparecimentoConcat?.trim()">
+        <strong>Local:</strong> {{ ocorrencia.localDesaparecimentoConcat }}
       </p>
+      
 
       <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
         <strong>Informações:</strong> {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
