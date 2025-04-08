@@ -25,12 +25,15 @@ export class ListaDesaparecidosComponent implements OnInit {
 
   carregarDados(): void {
     this.loading = true;
+    this.error = false;
+
     this.desaparecidosService.getDesaparecidosAleatorios().subscribe({
-      next: (res) => {
+      next: (res: Pessoa[]) => {
         this.todasPessoas = res;
         this.pessoasFiltradas = res;
         this.loading = false;
-        if (this.paginator) this.paginator.firstPage();
+        this.paginaAtual = 0;
+        this.paginator?.firstPage();
       },
       error: (err) => {
         console.error('Erro ao buscar desaparecidos', err);
@@ -41,9 +44,9 @@ export class ListaDesaparecidosComponent implements OnInit {
   }
 
   atualizarResultados(resultados: Pessoa[]): void {
-    this.pessoasFiltradas = resultados.length > 0 ? resultados : this.todasPessoas;
+    this.pessoasFiltradas = resultados.length ? resultados : this.todasPessoas;
     this.paginaAtual = 0;
-    if (this.paginator) this.paginator.firstPage();
+    this.paginator?.firstPage();
   }
 
   onPaginaChange(event: PageEvent): void {
@@ -58,5 +61,17 @@ export class ListaDesaparecidosComponent implements OnInit {
 
   get totalItens(): number {
     return this.pessoasFiltradas.length;
+  }
+
+  getStatus(pessoa: Pessoa): { texto: string, classe: string } {
+    const localizado = pessoa.ultimaOcorrencia?.encontradoVivo;
+    return localizado
+      ? { texto: 'Localizado', classe: 'bg-green-100 text-green-700 border-green-300' }
+      : { texto: 'Desaparecido', classe: 'bg-red-100 text-red-700 border-red-300' };
+  }
+
+  getLocalDesaparecimento(pessoa: Pessoa): string {
+    const local = pessoa.ultimaOcorrencia?.localDesaparecimentoConcat;
+    return local?.trim() || 'Local não informado';
   }
 }
