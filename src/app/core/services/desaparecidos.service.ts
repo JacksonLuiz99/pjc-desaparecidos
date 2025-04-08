@@ -86,11 +86,11 @@ export class DesaparecidosService {
   getDetalhesPessoa(id: number): Observable<Pessoa> {
     return this.http.get<Pessoa>(`${API_URL}/pessoas/${id}`);
   }
+  //Detalhes completos de uma pessoa
   getInformacoesCompletasPessoa(id: number): Observable<PessoaDetalhe> {
     return this.http.get<PessoaDetalhe>(`${API_URL}/pessoas/${id}`);
   }
   
-
   //Pessoas desaparecidas para exibição dinâmica
   getDesaparecidosAleatorios(): Observable<Pessoa[]> {
     return this.http.get<Pessoa[]>(`${API_URL}/pessoas/aberto/dinamico`);

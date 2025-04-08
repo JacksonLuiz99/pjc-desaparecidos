@@ -38,7 +38,7 @@ export class DetalheComponent implements OnInit {
 
   statusTexto = '';
   statusClasse = '';
-  erroMensagem: string = ''; // Variável para armazenar mensagens de erro
+  erroMensagem: string = '';
 
   constructor(
     private route: ActivatedRoute,
@@ -47,18 +47,15 @@ export class DetalheComponent implements OnInit {
 
   ngOnInit(): void {
     const idParam = this.route.snapshot.paramMap.get('id');
-    console.log('ID recebido na rota:', idParam);
-
     const id = Number(idParam);
+
     if (!id) {
-      console.error('ID inválido:', id);
       this.erroMensagem = 'ID inválido ou ausente. Tente novamente.';
       return;
     }
 
     this.desaparecidosService.getInformacoesCompletasPessoa(id).subscribe(
       (pessoa) => {
-        console.log('DETALHES COMPLETOS:', pessoa);
         this.pessoa = pessoa;
         this.definirStatus();
         this.calcularTempoDesaparecido();
@@ -84,8 +81,6 @@ export class DetalheComponent implements OnInit {
       this.statusTexto = 'Status indefinido';
       this.statusClasse = 'bg-gray-400';
     }
-
-    console.log('STATUS DA PESSOA:', this.statusTexto);
   }
 
   calcularTempoDesaparecido(): void {
@@ -102,7 +97,6 @@ export class DetalheComponent implements OnInit {
   }
 
   abrirModalInformacao(): void {
-    console.log('Abrindo modal de envio de informações...');
     this.mostrarModal = true;
   }
 }
