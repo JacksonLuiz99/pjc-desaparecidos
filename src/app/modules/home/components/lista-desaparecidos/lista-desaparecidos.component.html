@@ -16,7 +16,8 @@
   <div *ngIf="dadosVisiveis.length > 0; else nenhumResultado"
        class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
     <mat-card *ngFor="let pessoa of dadosVisiveis"
-              class="relative p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition flex flex-col h-full animate-fadeIn">
+              class="relative p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition flex flex-col h-full animate-fadeIn cursor-pointer"
+              [routerLink]="['/detalhes', pessoa.id]">
 
       <!-- Status -->
       <span class="absolute top-4 right-4 px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase"
@@ -48,13 +49,6 @@
             Último local visto: {{ getLocalDesaparecimento(pessoa) }}
           </p>
         </ng-container>
-
-        <a mat-stroked-button color="primary"
-           class="mt-3 self-start flex items-center gap-1"
-           [routerLink]="['/detalhes', pessoa.id]">
-          <mat-icon>search</mat-icon>
-          Ver detalhes
-        </a>
       </mat-card-content>
     </mat-card>
   </div>
