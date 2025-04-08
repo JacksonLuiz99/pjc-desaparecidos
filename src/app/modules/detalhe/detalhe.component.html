@@ -1,15 +1,26 @@
-<div *ngIf="pessoa as p" class="max-w-6xl mx-auto bg-white shadow-2xl rounded-3xl p-6 sm:p-10 mt-10">
+<div *ngIf="pessoa as p" class="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-6 sm:p-10 mt-10">
 
-  <!-- Foto em destaque maior ainda -->
+  <!-- Botão de voltar com mais destaque -->
+  <div class="mb-8">
+    <button
+      routerLink="/lista"
+      class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-4 py-2 rounded-xl shadow transition"
+    >
+      <i lucideArrowLeft class="w-5 h-5"></i>
+      Voltar para a lista
+    </button>
+  </div>
+
+  <!-- Foto em destaque ajustada -->
   <div class="flex justify-center">
     <div class="relative">
       <img
         *ngIf="p.urlFoto"
         [src]="p.urlFoto"
         [alt]="'Foto de ' + p.nome"
-        class="w-full max-w-2xl h-auto sm:h-[32rem] object-cover rounded-3xl border-8 border-white shadow-2xl ring-4 ring-red-500"
+        class="w-full max-w-xl h-auto sm:h-[26rem] object-cover rounded-3xl border-8 border-white shadow-2xl ring-4 ring-red-500"
       />
-      <!-- Status flutuante sobreposto no canto inferior -->
+      <!-- Status flutuante sobreposto -->
       <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
         <span
           class="inline-block px-6 py-2 rounded-full text-white text-base sm:text-lg font-bold tracking-wide shadow-xl"
