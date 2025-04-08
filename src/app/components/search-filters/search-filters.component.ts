@@ -18,22 +18,17 @@ export class SearchFiltersComponent {
   constructor(private desaparecidosService: DesaparecidosService) {}
 
   buscar(): void {
-    const sexoValido =
-      this.sexo === 'M' ? 'MASCULINO' :
-      this.sexo === 'F' ? 'FEMININO' :
-      undefined;
+    const filtros = {
+      pagina: 0,
+      porPagina: 10,
+      nome: this.nome?.trim() || undefined,
+      status: this.status !== 'undefined' ? this.status : undefined,
+      sexo: this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : undefined,
+      faixaIdadeInicial: this.idadeMin ?? undefined,
+      faixaIdadeFinal: this.idadeMax ?? undefined,
+    };
 
-    const statusValido = this.status !== 'undefined' ? this.status : undefined;
-
-    this.desaparecidosService.getDesaparecidosPaginados(
-      0,
-      999,
-      statusValido,
-      this.nome?.trim() || undefined,
-      sexoValido,
-      this.idadeMin ?? undefined,
-      this.idadeMax ?? undefined
-    ).subscribe(resultado => {
+    this.desaparecidosService.getDesaparecidosPaginados(filtros).subscribe(resultado => {
       this.resultadoBusca.emit(resultado.content);
     });
   }

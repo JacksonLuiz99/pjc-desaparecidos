@@ -60,27 +60,28 @@ export class DesaparecidosService {
   constructor(private http: HttpClient) {}
 
   //Busca paginada com filtros (novo endpoint correto)
-  getDesaparecidosPaginados(
-    pagina = 0,
-    porPagina = 10,
-    status?: string,
-    nome?: string,
-    sexo?: string,
-    faixaIdadeInicial?: number,
-    faixaIdadeFinal?: number
-  ): Observable<RespostaPaginada> {
+  getDesaparecidosPaginados(filtros: {
+    pagina?: number;
+    porPagina?: number;
+    status?: string;
+    nome?: string;
+    sexo?: string;
+    faixaIdadeInicial?: number;
+    faixaIdadeFinal?: number;
+  }): Observable<RespostaPaginada> {
     let params = new HttpParams()
-      .set('pagina', pagina.toString())
-      .set('porPagina', porPagina.toString());
+      .set('pagina', (filtros.pagina ?? 0).toString())
+      .set('porPagina', (filtros.porPagina ?? 10).toString());
   
-    if (status) params = params.set('status', status);
-    if (nome) params = params.set('nome', nome);
-    if (sexo) params = params.set('sexo', sexo);
-    if (faixaIdadeInicial != null) params = params.set('faixaIdadeInicial', faixaIdadeInicial.toString());
-    if (faixaIdadeFinal != null) params = params.set('faixaIdadeFinal', faixaIdadeFinal.toString());
+    if (filtros.status) params = params.set('status', filtros.status);
+    if (filtros.nome) params = params.set('nome', filtros.nome);
+    if (filtros.sexo) params = params.set('sexo', filtros.sexo);
+    if (filtros.faixaIdadeInicial != null) params = params.set('faixaIdadeInicial', filtros.faixaIdadeInicial.toString());
+    if (filtros.faixaIdadeFinal != null) params = params.set('faixaIdadeFinal', filtros.faixaIdadeFinal.toString());
   
     return this.http.get<RespostaPaginada>(`${API_URL}/pessoas/aberto/filtro`, { params });
   }
+  
   
 
   //Detalhes simples

@@ -27,10 +27,11 @@ export class ListaDesaparecidosComponent implements OnInit {
     this.loading = true;
     this.error = false;
 
-    this.desaparecidosService.getDesaparecidosPaginados(
-      this.paginaAtual,
-      this.itensPorPagina
-    ).subscribe({
+    this.desaparecidosService.getDesaparecidosPaginados({
+      pagina: this.paginaAtual,
+      porPagina: this.itensPorPagina
+    })
+    .subscribe({
       next: (res: RespostaPaginada) => {
         this.pessoasFiltradas = res.content;
         this.totalItens = res.totalElements;
