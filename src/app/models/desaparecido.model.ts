@@ -1,7 +1,7 @@
 export interface Pessoa {
   id: number;
   nome?: string;
-  home?: string; // campo alternativo para nome
+  home?: string; 
   idade?: number;
   sexo?: 'MASCULINO' | 'FEMININO';
   ultimoCorrencia?: {
