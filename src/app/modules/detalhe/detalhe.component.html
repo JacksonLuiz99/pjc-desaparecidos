@@ -75,13 +75,13 @@
         <strong>Local:</strong> {{ ocorrencia.localDesaparecimentoConcat }}
       </p>
 
-      <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
-        <strong>Informações:</strong> {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
-      </p>
-
       <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido">
-        <strong>Vestimentas:</strong> {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
+        Vestimentas: {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
       </p>
+      <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
+        Info adicional: {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
+      </p>
+      
     </div>
   </div>
 

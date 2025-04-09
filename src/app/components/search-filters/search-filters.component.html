@@ -9,16 +9,32 @@
   </div>
 
   <!-- Faixa Etária -->
-  <div class="campo-row">
-    <div class="campo half">
-      <label for="idadeMin">Idade Mínima</label>
-      <input id="idadeMin" type="number" [(ngModel)]="idadeMin" min="0" placeholder="Ex: 10" />
-    </div>
-    <div class="campo half">
-      <label for="idadeMax">Idade Máxima</label>
-      <input id="idadeMax" type="number" [(ngModel)]="idadeMax" min="0" placeholder="Ex: 60" />
-    </div>
+<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div>
+    <label for="idadeMin" class="block text-sm font-medium text-gray-700">Idade Mínima</label>
+    <input
+      id="idadeMin"
+      type="number"
+      [(ngModel)]="idadeMin"
+      min="0"
+      placeholder="Ex: 10"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+    />
   </div>
+
+  <div>
+    <label for="idadeMax" class="block text-sm font-medium text-gray-700">Idade Máxima</label>
+    <input
+      id="idadeMax"
+      type="number"
+      [(ngModel)]="idadeMax"
+      min="0"
+      placeholder="Ex: 60"
+      class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500"
+    />
+  </div>
+</div>
+
 
   <!-- Sexo e Status -->
   <div class="campo-row">
