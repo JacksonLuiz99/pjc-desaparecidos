@@ -1,15 +1,15 @@
-# Projeto: Consulta de Pessoas Desaparecidas - PJC-MT
+# 🚨 Projeto: Consulta de Pessoas Desaparecidas - PJC-MT
 
-Este projeto foi desenvolvido como parte do processo seletivo da **SEPLAG/UFMT - Edital nº 003/2024**, para o cargo de **Analista de TI - Perfil Júnior**.  
-A aplicação permite consultar pessoas desaparecidas utilizando os dados públicos da API da **Polícia Judiciária Civil do Estado de Mato Grosso (PJC-MT)**.
+Este repositório apresenta uma aplicação desenvolvida para o processo seletivo da **SEPLAG/UFMT - Edital nº 003/2024**, voltada ao cargo de **Analista de TI - Perfil Júnior**.
+A solução permite a consulta pública de pessoas desaparecidas com base nos dados fornecidos pela **Polícia Judiciária Civil do Estado de Mato Grosso (PJC-MT)**.
 
 ---
 
-## 👤 Dados do Candidato
+## 👤 Sobre o Desenvolvedor
 
 - **Nome:** JACKSON LUIZ DOMINGOS SILVA  
 - **Inscrição:** 8593  
-- **E-mail:** jacksoncuiaba99@gmail.com  
+- **E-mail:** [jacksoncuiaba99@gmail.com](mailto:jacksoncuiaba99@gmail.com)  
 - **Telefone fixo:** (65) 3613-5637  
 - **Celular:** (65) 99916-1859  
 - **Data da Inscrição:** 31/03/2025 às 17:41:12  
@@ -17,44 +17,105 @@ A aplicação permite consultar pessoas desaparecidas utilizando os dados públi
 
 ---
 
-## 🛠️ Tecnologias utilizadas
+## 🛠️ Tecnologias Utilizadas
 
-- **Angular 16**
-- **TypeScript**
-- **Tailwind CSS**
-- **Angular Material**
-- **HTML5/CSS3**
-- **RxJS**
-- **API PJC-MT**: [https://abitus-api.geia.vip/swagger-ui/index.html](https://abitus-api.geia.vip/swagger-ui/index.html)
-- **Docker** (opcional para execução com container)
-- **Node.js e NPM** (ambiente de desenvolvimento local)
+- ⚙️ **Angular 16**
+- 🟦 **TypeScript**
+- 🎨 **Tailwind CSS** + **Angular Material**
+- 🧩 **RxJS** e **HTML5/CSS3**
+- 🔗 **API Pública da PJC-MT**: [Documentação Swagger](https://abitus-api.geia.vip/swagger-ui/index.html)
+- 🐳 **Docker** (execução opcional via container)
+- 🧪 **Node.js** e **NPM** (para ambiente de desenvolvimento local)
 
 ---
 
-## 🚀 Funcionalidades
+## 🚀 Funcionalidades Principais
 
-- Listagem paginada de pessoas desaparecidas
-- Filtro por nome, idade, sexo e status
-- Detalhamento de cada pessoa desaparecida
-- Exibição da foto, status, local e data do desaparecimento
-- Envio de informações relevantes via formulário (integrado à API)
-- Responsividade e acessibilidade
-- Layout moderno com Tailwind + Material Design
+- ✅ Listagem paginada de pessoas desaparecidas
+- 🔍 Filtros por nome, idade, sexo e status (desaparecido/localizado)
+- 📄 Página de **detalhes completos** de cada pessoa
+- 🖼️ Exibição de foto, status com cor, data e local do desaparecimento
+- 📝 Formulário com máscara e envio de informações à PJC via API oficial
+- 📱 Interface **100% responsiva** com acessibilidade e usabilidade
+- 💅 Design limpo e moderno com Tailwind e Angular Material
 
 ---
 
-## 📦 Como executar o projeto localmente
+## 🧑‍💻 Executando Localmente
 
 ### 1. Pré-requisitos
 
-- [Node.js](https://nodejs.org/) (versão 18+ recomendada)
-- [Angular CLI](https://angular.io/cli) instalado globalmente:
-  ```bash
-  npm install -g @angular/cli
+- [Node.js](https://nodejs.org/) (v18 ou superior)
+- Angular CLI instalado globalmente:
+```bash
+npm install -g @angular/cli
+```
 
-# Clone o repositório, instale as dependências e execute a aplicação
-git clone https://github.com/seu-usuario/pjc-desaparecidos.git && \
-cd pjc-desaparecidos && \
-npm install && \
+### 2. Clone o projeto e execute:
+
+```bash
+git clone https://github.com/seu-usuario/pjc-desaparecidos.git
+cd pjc-desaparecidos
+npm install
 ng serve
-👉 http://localhost:4200
+```
+
+Acesse: [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 🐳 Execução via Docker
+
+> Recurso opcional para rodar a aplicação em container isolado.
+
+### 📁 `Dockerfile`
+
+```dockerfile
+FROM node:22-alpine
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 4200
+
+CMD ["npm", "start", "--", "--host", "0.0.0.0"]
+```
+
+### 🔨 Buildando a Imagem
+
+- **Linux:**
+```bash
+sudo docker build -t pjc-desaparecidos .
+```
+- **Windows:**
+```bash
+docker build -t pjc-desaparecidos .
+```
+
+### ▶️ Executando o Container
+
+- **Linux:**
+```bash
+sudo docker run -p 4200:4200 pjc-desaparecidos
+```
+- **Windows:**
+```bash
+docker run -p 4200:4200 pjc-desaparecidos
+```
+
+Abra no navegador: [http://localhost:4200](http://localhost:4200)
+
+---
+
+## 📌 Observações Finais
+
+Este projeto foi desenvolvido com foco em **boas práticas de código, performance e clareza visual**, atendendo às exigências do edital. Todo o consumo da API foi feito com segurança, tratamento de erros e normalização de dados para garantir uma excelente experiência ao usuário final.
+
+---
+
+> 💬 Em caso de dúvidas ou sugestões, sinta-se à vontade para entrar em contato. Obrigado por visitar este repositório!
