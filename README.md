@@ -9,11 +9,8 @@ A solução permite a consulta pública de pessoas desaparecidas com base nos da
 
 - **Nome:** JACKSON LUIZ DOMINGOS SILVA  
 - **Inscrição:** 8593  
-- **E-mail:** [jacksoncuiaba99@gmail.com](mailto:jacksoncuiaba99@gmail.com)  
 - **Telefone fixo:** (65) 3613-5637  
-- **Celular:** (65) 99916-1859  
 - **Data da Inscrição:** 31/03/2025 às 17:41:12  
-- **Pessoa com deficiência (PCD):** Não
 
 ---
 
