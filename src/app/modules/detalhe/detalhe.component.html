@@ -1,120 +1,144 @@
-<div *ngIf="pessoa as p" class="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-6 sm:p-10 mt-10">
-
-  <!-- Botão de voltar com mais destaque -->
-  <div class="mb-8">
-    <button
-      routerLink="/lista"
-      class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-4 py-2 rounded-xl shadow transition"
+<ng-container *ngIf="erroDetalhe$ | async as erro">
+  <div class="max-w-5xl mx-auto mt-10 p-6 text-center" *ngIf="erro">
+    <p
+      class="text-red-600 font-semibold bg-red-100 p-4 rounded-xl border border-red-300"
     >
-      <i lucideArrowLeft class="w-5 h-5"></i>
-      Voltar para a lista
-    </button>
-  </div>
-
-  <!-- Foto em destaque ajustada -->
-  <div class="flex justify-center">
-    <div class="relative">
-      <img
-        *ngIf="p.urlFoto"
-        [src]="p.urlFoto"
-        [alt]="'Foto de ' + p.nome"
-        class="w-full max-w-xl h-auto sm:h-[26rem] object-cover rounded-3xl border-8 border-white shadow-2xl ring-4 ring-red-500"
-      />
-      <!-- Status flutuante sobreposto -->
-      <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
-        <span
-          class="inline-block px-6 py-2 rounded-full text-white text-base sm:text-lg font-bold tracking-wide shadow-xl"
-          [ngClass]="statusClasse"
-        >
-          {{ statusTexto }}
-        </span>
-      </div>
-    </div>
-  </div>
-
-  <!-- Nome e informações -->
-  <div class="text-center mt-6">
-    <h2 class="text-4xl sm:text-5xl font-bold text-gray-800">{{ p.nome }}</h2>
-    <p class="text-gray-600 text-lg sm:text-2xl mt-2">
-      {{ p.idade ? p.idade + ' anos' : 'Idade não informada' }} ·
-      {{ p.sexo || 'Sexo não informado' }}
+      {{ erro }}
     </p>
+  </div>
+</ng-container>
 
-    <div *ngIf="p.ultimaOcorrencia" class="mt-3">
-      <p
-        class="text-base sm:text-lg font-medium"
-        [ngClass]="{
-          'text-green-600': p.ultimaOcorrencia.dataLocalizacao,
-          'text-red-600': !p.ultimaOcorrencia.dataLocalizacao
-        }"
+<ng-container *ngIf="pessoaDetalhe$ | async as p">
+  <div
+    class="max-w-5xl mx-auto bg-white shadow-2xl rounded-3xl p-6 sm:p-10 mt-10"
+  >
+    <!-- Botão de voltar com mais destaque -->
+    <div class="mb-8">
+      <button
+        routerLink="/lista"
+        class="inline-flex items-center gap-2 bg-red-100 hover:bg-red-200 text-red-700 font-semibold px-4 py-2 rounded-xl shadow transition"
       >
-        <ng-container *ngIf="p.ultimaOcorrencia.dataLocalizacao; else desaparecido">
-          Localizado em {{ p.ultimaOcorrencia.dataLocalizacao | date: 'dd/MM/yyyy' }}
-        </ng-container>
-
-        <ng-template #desaparecido>
-          Desaparecido desde {{ dataDesaparecimento }}
-          <span *ngIf="diasDesaparecido !== null">({{ diasDesaparecido }} dias)</span>
-        </ng-template>
-      </p>
+        <mat-icon class="w-5 h-5 align-middle">arrow_back</mat-icon>
+        Voltar para a lista
+      </button>
     </div>
-  </div>
 
-  <!-- Detalhes do desaparecimento -->
-  <div *ngIf="p.ultimaOcorrencia as ocorrencia" class="mt-12">
-    <h3 class="text-2xl font-semibold text-gray-800 border-b pb-1 mb-4">
-      Detalhes do Desaparecimento
-    </h3>
-
-    <div class="space-y-3 text-gray-700 text-base sm:text-lg">
-      <p *ngIf="ocorrencia.dtDesaparecimento">
-        <strong>Data do desaparecimento:</strong> {{ ocorrencia.dtDesaparecimento | date: 'dd/MM/yyyy' }}
-      </p>
-
-      <p *ngIf="ocorrencia.localDesaparecimentoConcat?.trim()">
-        <strong>Local:</strong> {{ ocorrencia.localDesaparecimentoConcat }}
-      </p>
-
-      <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido">
-        Vestimentas: {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
-      </p>
-      <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
-        Info adicional: {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
-      </p>
-      
-    </div>
-  </div>
-
-  <!-- Botão de informação -->
-  <div class="mt-10 flex justify-center">
-    <button
-      (click)="abrirModalInformacao()"
-      class="bg-red-600 hover:bg-red-700 text-white text-base sm:text-lg font-semibold px-6 py-3 rounded-xl flex items-center gap-2 shadow-md transition-all"
-    >
-      <i lucideEye class="w-5 h-5"></i>
-      Viu ou sabe desta pessoa?
-    </button>
-  </div>
-
-  <!-- Cartazes -->
-  <div *ngIf="p.ultimaOcorrencia?.listCartaz as cartazes" class="mt-12">
-    <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
-      Cartazes Disponíveis
-    </h3>
-
-    <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
-      <div
-        *ngFor="let cartaz of cartazes"
-        class="rounded-xl overflow-hidden shadow hover:shadow-lg transition"
-      >
-        <a [href]="cartaz.urlCartaz" target="_blank" download>
-          <img
-            [src]="cartaz.urlCartaz"
-            [alt]="'Cartaz de ' + p.nome"
-            class="w-full h-auto object-cover"
-          />
-        </a>
+    <!-- Foto em destaque ajustada -->
+    <div class="flex justify-center">
+      <div class="relative">
+        <img
+          *ngIf="p.urlFoto"
+          [src]="p.urlFoto"
+          [alt]="'Foto de ' + p.nome"
+          class="w-full max-w-xl h-auto sm:h-[26rem] object-cover rounded-3xl border-8 border-white shadow-2xl ring-4 ring-red-500"
+        />
+        <!-- Status flutuante sobreposto -->
+        <div class="absolute bottom-4 left-1/2 -translate-x-1/2">
+          <span
+            class="inline-block px-6 py-2 rounded-full text-white text-base sm:text-lg font-bold tracking-wide shadow-xl"
+            [ngClass]="statusClasse"
+          >
+            {{ statusTexto }}
+          </span>
+        </div>
       </div>
     </div>
+
+    <!-- Nome e informações -->
+    <div class="text-center mt-6">
+      <h2 class="text-4xl sm:text-5xl font-bold text-gray-800">{{ p.nome }}</h2>
+      <p class="text-gray-600 text-lg sm:text-2xl mt-2">
+        {{ p.idade ? p.idade + " anos" : "Idade não informada" }} ·
+        {{ p.sexo || "Sexo não informado" }}
+      </p>
+
+      <div class="mt-3" *ngIf="p.ultimaOcorrencia">
+        <p
+          class="text-base sm:text-lg font-medium"
+          [ngClass]="{
+            'text-green-600': p.ultimaOcorrencia.dataLocalizacao,
+            'text-red-600': !p.ultimaOcorrencia.dataLocalizacao,
+          }"
+        >
+          <ng-container
+            *ngIf="p.ultimaOcorrencia.dataLocalizacao; else sumidoBlock"
+          >
+            Localizado em
+            {{ p.ultimaOcorrencia.dataLocalizacao | date: "dd/MM/yyyy" }}
+          </ng-container>
+          <ng-template #sumidoBlock>
+            Desaparecido desde {{ dataDesaparecimento }}
+            <span *ngIf="diasDesaparecido !== null"
+              >({{ diasDesaparecido }} dias)</span
+            >
+          </ng-template>
+        </p>
+      </div>
+    </div>
+
+    <!-- Detalhes do desaparecimento -->
+    <ng-container *ngIf="p.ultimaOcorrencia as ocorrencia">
+      <div class="mt-12">
+        <h3 class="text-2xl font-semibold text-gray-800 border-b pb-1 mb-4">
+          Detalhes do Desaparecimento
+        </h3>
+
+        <div class="space-y-3 text-gray-700 text-base sm:text-lg">
+          <p *ngIf="ocorrencia.dtDesaparecimento">
+            <strong>Data do desaparecimento:</strong>
+            {{ ocorrencia.dtDesaparecimento | date: "dd/MM/yyyy" }}
+          </p>
+          <p *ngIf="ocorrencia.localDesaparecimentoConcat?.trim()">
+            <strong>Local:</strong>
+            {{ ocorrencia.localDesaparecimentoConcat }}
+          </p>
+          <p
+            *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido"
+          >
+            Vestimentas:
+            {{ ocorrencia.ocorrenciaEntrevDesapDTO?.vestimentasDesaparecido }}
+          </p>
+          <p *ngIf="ocorrencia.ocorrenciaEntrevDesapDTO?.informacao">
+            Info adicional:
+            {{ ocorrencia.ocorrenciaEntrevDesapDTO?.informacao }}
+          </p>
+        </div>
+      </div>
+    </ng-container>
+
+    <!-- Botão de informação -->
+    <div class="mt-10 flex justify-center">
+      <button
+        (click)="abrirModalInformacao(p)"
+        class="bg-red-600 hover:bg-red-700 text-white text-base sm:text-lg font-semibold px-6 py-3 rounded-xl flex items-center gap-2 shadow-md transition-all"
+      >
+        <mat-icon class="w-5 h-5 align-middle">visibility</mat-icon>
+        Viu ou sabe desta pessoa?
+      </button>
+    </div>
+
+    <!-- Cartazes -->
+    <ng-container *ngIf="p.ultimaOcorrencia?.listCartaz as cartazes">
+      <div class="mt-12" *ngIf="cartazes.length > 0">
+        <h3 class="text-xl sm:text-2xl font-semibold text-gray-800 mb-4">
+          Cartazes Disponíveis
+        </h3>
+
+        <div class="grid gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
+          <div
+            *ngFor="let cartaz of cartazes"
+            class="rounded-xl overflow-hidden shadow hover:shadow-lg transition"
+          >
+            <a [href]="cartaz.urlCartaz" target="_blank" download>
+              <img
+                [src]="cartaz.urlCartaz"
+                [alt]="'Cartaz de ' + p.nome"
+                class="w-full h-auto object-cover"
+              />
+            </a>
+          </div>
+        </div>
+      </div>
+    </ng-container>
   </div>
-</div>
+</ng-container>

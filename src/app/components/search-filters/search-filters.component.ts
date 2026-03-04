@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Output } from '@angular/core';
-import { DesaparecidosService, Pessoa } from 'src/app/core/services/desaparecidos.service';
+import { DesaparecidosFacade } from 'src/app/core/facades/desaparecidos.facade';
 
 @Component({
   selector: 'app-search-filters',
   templateUrl: './search-filters.component.html',
-  styleUrls: ['./search-filters.component.css']
+  styleUrls: ['./search-filters.component.css'],
 })
 export class SearchFiltersComponent {
   nome: string = '';
@@ -13,9 +13,9 @@ export class SearchFiltersComponent {
   sexo: string = 'undefined';
   status: string = 'undefined';
 
-  @Output() resultadoBusca = new EventEmitter<Pessoa[]>();
+  @Output() resultadoBusca = new EventEmitter<void>();
 
-  constructor(private desaparecidosService: DesaparecidosService) {}
+  constructor(private facade: DesaparecidosFacade) {}
 
   buscar(): void {
     const filtros = {
@@ -23,14 +23,18 @@ export class SearchFiltersComponent {
       porPagina: 10,
       nome: this.nome?.trim() || undefined,
       status: this.status !== 'undefined' ? this.status : undefined,
-      sexo: this.sexo === 'M' ? 'MASCULINO' : this.sexo === 'F' ? 'FEMININO' : undefined,
+      sexo:
+        this.sexo === 'M'
+          ? 'MASCULINO'
+          : this.sexo === 'F'
+            ? 'FEMININO'
+            : undefined,
       faixaIdadeInicial: this.idadeMin ?? undefined,
       faixaIdadeFinal: this.idadeMax ?? undefined,
     };
 
-    this.desaparecidosService.getDesaparecidosPaginados(filtros).subscribe(resultado => {
-      this.resultadoBusca.emit(resultado.content);
-    });
+    this.facade.buscar(filtros);
+    this.resultadoBusca.emit();
   }
 
   limpar(): void {

@@ -1,73 +1,107 @@
 <app-header></app-header>
-<app-search-filters (resultadoBusca)="atualizarResultados($event)"></app-search-filters>
+<app-search-filters
+  (resultadoBusca)="atualizarResultados()"
+></app-search-filters>
 
 <div class="container mx-auto px-4 py-6">
-  <!-- Título -->
-  <div class="mb-6 text-center">
-    <h1 class="text-2xl font-bold text-gray-800">
-      {{ pessoasFiltradas.length ? 'Resultados da busca:' : 'Nenhum resultado encontrado' }}
-    </h1>
-    <p class="text-sm text-gray-600">
-      {{ pessoasFiltradas.length ? 'Veja abaixo os resultados encontrados.' : 'Nenhuma pessoa encontrada com os filtros aplicados.' }}
-    </p>
+  <!-- Título e Feedback Visual de Loading -->
+  <div class="mb-6 text-center text-gray-800">
+    <ng-container *ngIf="loading$ | async; else loadedBlock">
+      <div class="flex justify-center items-center gap-3">
+        <div
+          class="w-6 h-6 border-4 border-red-500 border-t-transparent rounded-full animate-spin"
+        ></div>
+        <h1 class="text-2xl font-bold">Buscando informações...</h1>
+      </div>
+    </ng-container>
+    <ng-template #loadedBlock>
+      <ng-container *ngIf="total$ | async as total; else emptyBlock">
+        <h1 class="text-2xl font-bold">
+          Resumo da busca: {{ total }} resultado(s) encontrado(s)
+        </h1>
+        <p class="text-sm text-gray-600 mt-1">
+          Veja abaixo as informações detalhadas correspondentes aos filtros
+          aplicados.
+        </p>
+      </ng-container>
+      <ng-template #emptyBlock>
+        <h1 class="text-2xl font-bold text-gray-500">
+          Nenhum resultado encontrado
+        </h1>
+        <p class="text-sm text-gray-600">
+          Tente ajustar seus filtros de busca acima.
+        </p>
+      </ng-template>
+    </ng-template>
   </div>
 
   <!-- Cards -->
-  <div *ngIf="pessoasFiltradas.length > 0; else nenhumResultado"
-       class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-    <mat-card *ngFor="let pessoa of pessoasFiltradas"
-              class="relative p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition flex flex-col h-full animate-fadeIn cursor-pointer"
-              [routerLink]="['/detalhes', pessoa.id]">
+  <ng-container *ngIf="pessoas$ | async as pessoas">
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+      <mat-card
+        *ngFor="let pessoa of pessoas"
+        class="relative p-4 rounded-2xl bg-white shadow-md hover:shadow-xl transition flex flex-col h-full animate-fadeIn cursor-pointer"
+        [routerLink]="['/detalhes', pessoa.id]"
+      >
+        <!-- Status tag -->
+        <span
+          class="absolute top-4 right-4 px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase z-10"
+          [ngClass]="getStatus(pessoa).classe"
+        >
+          {{ getStatus(pessoa).texto }}
+        </span>
 
-      <!-- Status -->
-      <span class="absolute top-4 right-4 px-3 py-1 text-xs font-bold rounded-full border shadow-sm uppercase"
-            [ngClass]="getStatus(pessoa).classe">
-        {{ getStatus(pessoa).texto }}
-      </span>
+        <!-- Imagem -->
+        <div
+          class="w-full h-64 overflow-hidden rounded-xl mb-4 bg-gray-100 flex items-center justify-center"
+        >
+          <img
+            [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'"
+            [alt]="pessoa.nome"
+            class="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+          />
+        </div>
 
-      <!-- Imagem -->
-      <div class="w-full h-64 overflow-hidden rounded-xl mb-4 bg-gray-100 flex items-center justify-center">
-        <img [src]="pessoa.urlFoto || 'assets/imagem-padrao.svg'"
-             [alt]="pessoa.nome || 'Desaparecido'"
-             class="w-full h-full object-cover transition-transform duration-500 hover:scale-105" />
-      </div>
+        <!-- Informações -->
+        <mat-card-content
+          class="flex-1 flex flex-col gap-1 text-sm text-gray-700"
+        >
+          <h2 class="text-base font-bold text-gray-800">
+            {{ pessoa.nome || "Nome não informado" }}
+          </h2>
 
-      <!-- Informações -->
-      <mat-card-content class="flex-1 flex flex-col gap-1 text-sm text-gray-700">
-        <h2 class="text-base font-bold text-gray-800">
-          {{ pessoa.nome || 'Nome não informado' }}
-        </h2>
+          <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
+          <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
 
-        <p *ngIf="pessoa.idade">Idade: {{ pessoa.idade }} anos</p>
-        <p *ngIf="pessoa.sexo">Sexo: {{ pessoa.sexo | titlecase }}</p>
-
-        <ng-container *ngIf="pessoa.ultimaOcorrencia as ocorrencia">
-          <p *ngIf="ocorrencia.dtDesaparecimento">
-            Desaparecido em: {{ ocorrencia.dtDesaparecimento | date:'dd/MM/yyyy' }}
-          </p>
-          <p>
-            Último local visto: {{ getLocalDesaparecimento(pessoa) }}
-          </p>
-        </ng-container>
-      </mat-card-content>
-    </mat-card>
-  </div>
-
-  <!-- Nenhum resultado -->
-  <ng-template #nenhumResultado>
-    <div class="text-center py-10 text-gray-500 text-base italic">
-      Nenhuma pessoa desaparecida encontrada.
+          <ng-container *ngIf="pessoa.ultimaOcorrencia as ocorrencia">
+            <p *ngIf="ocorrencia.dtDesaparecimento">
+              Desaparecido em:
+              {{ ocorrencia.dtDesaparecimento | date: "dd/MM/yyyy" }}
+            </p>
+            <p>Último local visto: {{ getLocalDesaparecimento(pessoa) }}</p>
+          </ng-container>
+        </mat-card-content>
+      </mat-card>
     </div>
-  </ng-template>
+  </ng-container>
+
+  <div *ngIf="erro$ | async" class="text-center py-10">
+    <p
+      class="text-red-600 font-semibold bg-red-100 p-4 rounded-xl border border-red-300"
+    >
+      Ocorreu um erro ao buscar os dados. Tente novamente mais tarde.
+    </p>
+  </div>
 
   <!-- Paginação -->
   <div class="mt-10">
-    <mat-paginator [length]="totalItens"
-                   [pageSize]="itensPorPagina"
-                   [pageSizeOptions]="[5, 10, 25, 100]"
-                   showFirstLastButtons
-                   (page)="onPaginaChange($event)">
-    </mat-paginator>
+    <mat-paginator
+      [length]="total$ | async"
+      [pageSize]="itensPorPagina"
+      [pageSizeOptions]="[5, 10, 25, 100]"
+      showFirstLastButtons
+      (page)="onPaginaChange($event)"
+    ></mat-paginator>
   </div>
 </div>
 
